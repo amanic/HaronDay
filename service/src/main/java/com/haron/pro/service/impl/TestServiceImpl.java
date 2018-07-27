@@ -1,5 +1,6 @@
 package com.haron.pro.service.impl;
 
+import com.haron.pro.common.util.WxWebUtils;
 import com.haron.pro.dao.mapper.UserMapper;
 import com.haron.pro.service.api.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,6 @@ public class TestServiceImpl implements TestService{
 
     @Override
     public String test1(Integer i) {
-        return userMapper.selectByPrimaryKey(i).toString();
+        return "操作者："+WxWebUtils.getWxWebUserFromSession().getOpenId()+"得到的结果是："+userMapper.selectByPrimaryKey(i).toString();
     }
 }

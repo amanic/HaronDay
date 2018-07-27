@@ -2,7 +2,7 @@
 #数据库配置
 jdbc:
   druid:
-    url: jdbc:mysql://127.0.0.1:3306/TOUSHA?useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://127.0.0.1:3306/haron?useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull
     user: root
     password: root
     filters: stat
@@ -22,7 +22,7 @@ jdbc:
 #打印sql日志
 logging:
   level:
-    com.siyi.front.dao.mapper: debug
+    com.haron.pro.dao.mapper: debug
 
 wx:
   appid: wx27f347f2f4c76849
@@ -72,7 +72,6 @@ wx:
       listTagByUser: cgi-bin/tags/getidlist
       cardInfo: card/get
       getCards: card/batchget
-      showQrCode: https://mp.weixin.qq.com/cgi-bin/showqrcode
       getTicket: cgi-bin/ticket/getticket
   mvc:
     interceptor:
