@@ -1,0 +1,10 @@
+wx:
+  appid: wx27f347f2f4c76849
+  path: wx
+  appsecret: bfbf986e8a23178486f30f74c1ad0929
+  token: chenhaitao
+  callback-url: http://haron.natapp1.cc
+  mvc:
+    interceptor:
+      include-patterns:
+        - /wx/**
