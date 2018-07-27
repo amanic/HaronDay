@@ -1,9 +1,79 @@
+
+#数据库配置
+jdbc:
+  druid:
+    url: jdbc:mysql://127.0.0.1:3306/TOUSHA?useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull
+    user: root
+    password: root
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+
+#打印sql日志
+logging:
+  level:
+    com.siyi.front.dao.mapper: debug
+
 wx:
   appid: wx27f347f2f4c76849
   path: wx
   appsecret: bfbf986e8a23178486f30f74c1ad0929
   token: chenhaitao
   callback-url: http://haron.natapp1.cc
+  url:
+      showQrCode: https://mp.weixin.qq.com/cgi-bin/showqrcode
+      host: api.weixin.qq.com
+      refreshToken: cgi-bin/token
+      getCallbackIp: cgi-bin/getcallbackip
+      getMenu: cgi-bin/menu/get
+      deleteMenu: cgi-bin/menu/delete
+      createMenu: cgi-bin/menu/create
+      uploadTempMedia: cgi-bin/media/upload
+      getTempMedia: cgi-bin/media/get
+      getUserInfo: cgi-bin/user/info
+      addNews: cgi-bin/material/add_news
+      updateNews: cgi-bin/material/update_news
+      uploadImg: cgi-bin/media/uploadimg
+      uploadMedia: cgi-bin/material/add_material
+      getMedia: cgi-bin/material/get_material
+      getNewsMedia: ${getMaterial}
+      getVideoMedia: ${getMaterial}
+      delMedia: cgi-bin/material/del_material
+      getMediaCount: cgi-bin/material/get_materialcount
+      batchGetMedia: cgi-bin/material/batchget_material
+      clearQuota: cgi-bin/clear_quota
+      setMessageStatus: cgi-bin/message/custom/typing
+      sendUserMessage: cgi-bin/message/custom/send
+      sendTemplateMessage: cgi-bin/message/template/send
+      getUserAccessTokenByCode: sns/oauth2/access_token
+      getUserInfoByUserAccessToken: sns/userinfo
+      createQrCode: cgi-bin/qrcode/create
+      sendGroupMessage: cgi-bin/message/mass/sendall
+      sendUsersMessage: cgi-bin/message/mass/send
+      previewGroupMessage: cgi-bin/message/mass/preview
+      getGroupMessageStatus: cgi-bin/message/mass/get
+      listUserByTag: cgi-bin/user/tag/get
+      createTag: cgi-bin/tags/create
+      getTags: cgi-bin/tags/get
+      updateTag: cgi-bin/tags/update
+      deleteTag: cgi-bin/tags/delete
+      batchTagging: cgi-bin/tags/members/batchtagging
+      batchUntagging: cgi-bin/tags/members/batchuntagging
+      listTagByUser: cgi-bin/tags/getidlist
+      cardInfo: card/get
+      getCards: card/batchget
+      showQrCode: https://mp.weixin.qq.com/cgi-bin/showqrcode
+      getTicket: cgi-bin/ticket/getticket
   mvc:
     interceptor:
       include-patterns:

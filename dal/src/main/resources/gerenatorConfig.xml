@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <classPathEntry location="/Users/chenhaitao/maven/m2/mysql/mysql-connector-java/5.1.38/mysql-connector-java-5.1.38.jar" /><!--驱动包存放的位子-->
+    <context id="context1" >
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://39.108.144.11:3306/test" userId="root" password="root" />
+        <javaModelGenerator targetPackage="com.haron.pro.dao.entity" targetProject="src/main/java">
+            <property name="aaa" value="true" /><!--实体存放的位子-->
+        </javaModelGenerator>
+        <sqlMapGenerator targetPackage="com.haron.pro.dao.mapper"  targetProject="src/main/java" >
+            <property name="aaa" value="true" /><!--mapper.xml存放的位子-->
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.haron.pro.dao.mapper" targetProject="src/main/java">
+            <property name="aaa" value="true"/>
+        </javaClientGenerator>
+
+
+        <!--表名和实体名-->
+        <table tableName="user" domainObjectName="User"
+        enableCountByExample="true"
+        enableUpdateByExample="true"
+        enableDeleteByExample="true"
+        enableSelectByExample="true"
+        selectByExampleQueryId="true">
+    </table>
+</context>
+</generatorConfiguration>
