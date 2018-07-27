@@ -3,7 +3,7 @@
 <generatorConfiguration>
     <classPathEntry location="/Users/chenhaitao/maven/m2/mysql/mysql-connector-java/5.1.38/mysql-connector-java-5.1.38.jar" /><!--驱动包存放的位子-->
     <context id="context1" >
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://39.108.144.11:3306/test" userId="root" password="root" />
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://39.108.144.11:3306/haron" userId="root" password="root" />
         <javaModelGenerator targetPackage="com.haron.pro.dao.entity" targetProject="src/main/java">
             <property name="aaa" value="true" /><!--实体存放的位子-->
         </javaModelGenerator>

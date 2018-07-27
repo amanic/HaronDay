@@ -1,8 +1,11 @@
 package com.haron.pro.haron.controller;
 
 import com.haron.pro.common.util.WxWebUtils;
+import com.haron.pro.service.api.TestService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -12,9 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("wx/test")
 public class TetsController {
 
+    @Autowired
+    TestService testService;
+
+
     @GetMapping("t1")
-    public String t1(){
-        return "hello~";
+    public String t1(@RequestParam(value = "i") Integer i){
+        return testService.test1(i);
     }
 
 
