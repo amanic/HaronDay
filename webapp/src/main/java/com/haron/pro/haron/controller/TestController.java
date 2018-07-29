@@ -1,6 +1,5 @@
 package com.haron.pro.haron.controller;
 
-import com.haron.pro.common.util.WxWebUtils;
 import com.haron.pro.service.api.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("wx/test")
-public class TetsController {
+public class TestController {
 
     @Autowired
     TestService testService;

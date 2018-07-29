@@ -28,6 +28,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
 @WxApplication(menuAutoCreate = true)
 @WxController
 @ComponentScan(value = {"com.haron.pro"})
+@EnableSwagger2
 public class HaronApplication {
 
 	public static void main(String[] args) {
