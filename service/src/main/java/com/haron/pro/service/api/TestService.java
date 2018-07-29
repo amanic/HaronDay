@@ -7,4 +7,6 @@ public interface TestService {
 
     String test1(Integer i);
 
+    String test3();
+
 }

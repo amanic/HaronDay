@@ -380,6 +380,6 @@ public class WxUser {
 
     @Override
     public String toString() {
-        return "com.mxixm.fastboot.weixin.module.user.WxUser(subscribe=" + this.getSubscribe() + ", openId=" + this.getOpenId() + ", nickName=" + this.getNickName() + ", sex=" + this.getSex() + ", city=" + this.getCity() + ", country=" + this.getCountry() + ", province=" + this.getProvince() + ", language=" + this.getLanguage() + ", headImgUrl=" + this.getHeadImgUrl() + ", subscribeTime=" + this.getSubscribeTime() + ", unionId=" + this.getUnionId() + ", remark=" + this.getRemark() + ", groupId=" + this.getGroupId() + ", privileges=" + this.getPrivileges() + ", tagIdList=" + this.getTagIdList() + ")";
+        return "WxUser(subscribe=" + this.getSubscribe() + ", openId=" + this.getOpenId() + ", nickName=" + this.getNickName() + ", sex=" + this.getSex() + ", city=" + this.getCity() + ", country=" + this.getCountry() + ", province=" + this.getProvince() + ", language=" + this.getLanguage() + ", headImgUrl=" + this.getHeadImgUrl() + ", subscribeTime=" + this.getSubscribeTime() + ", unionId=" + this.getUnionId() + ", remark=" + this.getRemark() + ", groupId=" + this.getGroupId() + ", privileges=" + this.getPrivileges() + ", tagIdList=" + this.getTagIdList() + ")";
     }
 }

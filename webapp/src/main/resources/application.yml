@@ -2,7 +2,7 @@
 #数据库配置
 jdbc:
   druid:
-    url: jdbc:mysql://127.0.0.1:3306/haron?useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://39.108.144.11:3306/haron?useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull
     user: root
     password: root
     filters: stat
@@ -28,7 +28,7 @@ logging:
 
 #redis配置
 redis:
-  host: localhost
+  host: 39.108.144.11
   port: 6379
   timeout: 1000
   password: admin
