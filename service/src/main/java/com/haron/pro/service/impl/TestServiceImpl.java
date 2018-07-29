@@ -39,7 +39,7 @@ public class TestServiceImpl implements TestService{
     }
 
     @Override
-    public String test3() {
+    public String test2() {
         WxWebUser wxWebUser = WxWebUtils.getWxWebUserFromSession();
         redisTemplate.opsForValue().set("tempKey","tempValue",300, TimeUnit.SECONDS);
         String templateResult = redisTemplate.opsForValue().get("tempKey").toString();

@@ -26,14 +26,8 @@ public class TetsController {
         return testService.test1(i);
     }
 
-
     @GetMapping("t2")
     public String t2(){
-        return "token是："+WxWebUtils.getWxWebUserFromSession().getOpenId();
-    }
-
-    @GetMapping("t3")
-    public String t3(){
-        return testService.test3();
+        return testService.test2();
     }
 }
