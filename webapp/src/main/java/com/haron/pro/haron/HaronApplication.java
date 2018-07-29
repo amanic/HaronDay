@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,6 +39,7 @@ import java.util.stream.Collectors;
 @WxController
 @ComponentScan(value = {"com.haron.pro"})
 @EnableSwagger2
+@EnableScheduling
 public class HaronApplication {
 
 	public static void main(String[] args) {
