@@ -9,4 +9,6 @@ public interface TestService {
 
     String test2();
 
+    String test3();
+
 }

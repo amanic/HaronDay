@@ -22,7 +22,7 @@ public class RemindDateSchedule {
     @Autowired
     DateRemindService dateRemindService;
 
-    @Scheduled(cron = "")
+//    @Scheduled(cron = "")
     public String remindDate(){
         List<DateRemind> dateReminds = dateRemindMapper.selectToRemind(DateUtil.getCurrentDate("yyyy-MM-dd HH:mm:ss"));
         if(null==dateReminds||dateReminds.size()==0){
