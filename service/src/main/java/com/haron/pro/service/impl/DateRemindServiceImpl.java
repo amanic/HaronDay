@@ -8,7 +8,9 @@ import com.haron.pro.common.module.message.WxMessageTemplate;
 import com.haron.pro.common.module.message.WxUserMessage;
 import com.haron.pro.common.service.WxApiService;
 import com.haron.pro.common.util.HttpClientUtil;
+import com.haron.pro.dao.entity.ChatPrivate;
 import com.haron.pro.dao.entity.DateRemind;
+import com.haron.pro.dao.mapper.ChatPrivateMapper;
 import com.haron.pro.service.api.DateRemindService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,9 @@ public class DateRemindServiceImpl implements DateRemindService {
     @Autowired
     WxMessageTemplate wxMessageTemplate;
 
+    @Autowired
+    ChatPrivateMapper chatPrivateMapper;
+
     @Override
     public String remind(DateRemind remind) {
         WxUserMessage wxMessage = WxMessage.News.builder()
@@ -41,6 +46,10 @@ public class DateRemindServiceImpl implements DateRemindService {
 
     @Override
     public String chat(String content) {
+        ChatPrivate chatPrivate = chatPrivateMapper.selectByRecieve("%"+content+"%");
+        if(chatPrivate!=null){
+            return chatPrivate.getContent();
+        }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("key","b6f73bda544046988c5731de14701a35");
         jsonObject.put("info",content);

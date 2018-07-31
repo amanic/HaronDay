@@ -261,14 +261,14 @@ public class HaronApplication {
 	 * @param content
 	 * @return the result
 	 */
-	@WxMessageMapping(type = WxMessage.Type.TEXT)
+	/*@WxMessageMapping(type = WxMessage.Type.TEXT)
 	public String text(WxRequest wxRequest, String content) {
 		WxSession wxSession = wxRequest.getWxSession();
 		if (wxSession != null && wxSession.getAttribute("last") != null) {
 			return "上次收到消息内容为" + wxSession.getAttribute("last");
 		}
-		return "收到消息内容为" + content;
-	}
+		return "收到消息内容为?:" + content;
+	}*/
 
 
 	@WxMessageMapping(type = WxMessage.Type.LOCATION)
