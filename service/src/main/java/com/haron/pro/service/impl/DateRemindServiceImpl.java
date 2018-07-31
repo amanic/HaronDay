@@ -1,6 +1,7 @@
 package com.haron.pro.service.impl;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.haron.pro.common.module.message.WxMessage;
 import com.haron.pro.common.module.message.WxMessageTemplate;
@@ -12,7 +13,6 @@ import com.haron.pro.service.api.DateRemindService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 
 /**
  * Created by chenhaitao on 2018/7/29.
@@ -44,11 +44,16 @@ public class DateRemindServiceImpl implements DateRemindService {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("key","b6f73bda544046988c5731de14701a35");
         jsonObject.put("info",content);
-        String result = null;
+        String result = "我不知道你在说什么，我只知道皓然是最美的小姐姐！";
         try {
-            result = HttpClientUtil.doPost("http://www.tuling123.com/openapi/api",jsonObject);
+            String urlResult = HttpClientUtil.doPost("http://www.tuling123.com/openapi/api",jsonObject);
+            JSONObject object = JSON.parseObject(urlResult);
+            if(object.getInteger("code")==100000){
+                result = object.getString("text");
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            return result;
         }
         return result;
     }
