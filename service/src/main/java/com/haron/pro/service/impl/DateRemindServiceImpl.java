@@ -46,7 +46,7 @@ public class DateRemindServiceImpl implements DateRemindService {
 
     @Override
     public String chat(String content) {
-        ChatPrivate chatPrivate = chatPrivateMapper.selectByRecieve("%"+content+"%");
+        ChatPrivate chatPrivate = chatPrivateMapper.selectByRecieve(content);
         if(chatPrivate!=null){
             return chatPrivate.getContent();
         }
