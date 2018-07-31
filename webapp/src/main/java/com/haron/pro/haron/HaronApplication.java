@@ -1,5 +1,6 @@
 package com.haron.pro.haron;
 
+import com.alibaba.fastjson.JSONObject;
 import com.haron.pro.common.annotation.*;
 import com.haron.pro.common.module.credential.WxJsTicketManager;
 import com.haron.pro.common.module.event.WxEvent;
@@ -18,9 +19,12 @@ import com.haron.pro.common.module.web.WxRequestBody;
 import com.haron.pro.common.module.web.session.WxSession;
 import com.haron.pro.common.service.WxApiService;
 import com.haron.pro.common.service.WxExtendService;
+import com.haron.pro.common.util.HttpClientUtil;
 import com.haron.pro.common.util.WxMessageUtils;
 import com.haron.pro.common.util.WxWebUtils;
 import com.haron.pro.common.web.WxWebUser;
+import com.haron.pro.dao.entity.DateRemind;
+import com.haron.pro.service.api.DateRemindService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -61,6 +65,9 @@ public class HaronApplication {
 	@Autowired
 	WxJsTicketManager wxJsTicketManager;
 
+	@Autowired
+	DateRemindService dateRemindService;
+
 
 
 	/**
@@ -99,12 +106,12 @@ public class HaronApplication {
 
 
 
-	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.FIRST, name = "右1")
+	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.FIRST, name = "每日签到")
 	public WxMessage right1(WxUser wxUser) {
-		return WxMessage.miniProgramBuilder().appId("wx286b93c14bbf93aa").pagePath("pages/lunar/index").build();
+		return WxMessage.textBuilder().content("签到啦٩(๑>◡<๑)۶，又离纪念日进了一步。╰（‵□′）╯").build();
 	}
 
-	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.SECOND, name = "右2", type = WxButton.Type.LOCATION_SELECT)
+	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.SECOND, name = "查看最近纪念日", type = WxButton.Type.LOCATION_SELECT)
 	public WxMessage right2(WxUser wxUser) {
 		return WxMessage.newsBuilder().addItem("title","description","https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-674407.jpg","http://www.btkitty.com/").build();
 	}
@@ -275,18 +282,13 @@ public class HaronApplication {
 	 * @param content
 	 * @return the result
 	 */
-	@WxMessageMapping(type = WxMessage.Type.TEXT, wildcard = "1*")
+	@WxMessageMapping(type = WxMessage.Type.TEXT, wildcard = "*")
 	public String message(WxSession wxSession, String content) {
 		wxSession.setAttribute("last", content);
-		return "收到文本内容为" + content;
+		return dateRemindService.chat(content);
 	}
 
-	/**
-	 * 接受用户文本消息，异步返回文本消息
-	 *
-	 * @param content
-	 * @return the result
-	 */
+	/*
 	@WxMessageMapping(type = WxMessage.Type.TEXT, wildcard = "2*")
 	@WxAsyncMessage
 	public String text2(WxRequestBody.Text text, String content) {
@@ -294,12 +296,6 @@ public class HaronApplication {
 		return "收到消息内容为" + content + "!结果匹配！" + match;
 	}
 
-	/**
-	 * 接受用户文本消息，异步返回文本消息
-	 *
-	 * @param content
-	 * @return the result
-	 */
 	@WxMessageMapping(type = WxMessage.Type.TEXT, wildcard = "3*")
 	@WxAsyncMessage
 	public String text3(WxRequestBody.Text text, String content) {
@@ -338,7 +334,7 @@ public class HaronApplication {
 			l.add(WxMessage.WxCard.builder().cardId("pKS9_xPsM7ZCw7BW1U2lRRN-J2Qg").toUser(u).build());
 			return l.stream();
 		}).collect(Collectors.toList());
-	}
+	}*/
 
 	@RequestMapping("cards")
 	public List<WxCard> cards() {

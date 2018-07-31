@@ -9,6 +9,8 @@ public interface TestService {
 
     String test2();
 
-    String test3();
+    String test3(String openId);
+
+    String test4(String openId);
 
 }

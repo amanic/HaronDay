@@ -55,14 +55,22 @@ public class TestServiceImpl implements TestService{
     }
 
     @Override
-    public String test3() {
+    public String test3(String openId) {
         WxUserMessage wxMessage = WxMessage.News.builder()
                 .addItem("测试图文消息", "测试", "https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-661501.jpg", "http://tczmh.club/bz/index.html")
                 .addItem("测试图文消息", "测试", "https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-679271.png", "https://github.com/amanic")
                 .addItem("测试图文消息", "测试", "https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-9394.jpg", "https://github.com/LauItachi/WeChatTest")
                 .build();
 
-        wxMessageTemplate.sendMessage("oqJUswk1biizI3O8lzM3_QKewbQM", wxMessage);
+        wxMessageTemplate.sendMessage(openId, wxMessage);
+        return "--------------------------";
+    }
+
+    @Override
+    public String test4(String openId) {
+        WxUserMessage wxMessage = WxMessage.textBuilder().content("欢迎来到纪念日！٩(๑>◡<๑)۶").build();
+//        wxMessage = WxMessage.mpNewsBuilder().mediaId("4576873954uhtgfvd").build();
+        wxMessageTemplate.sendMessage(openId, wxMessage);
         return "--------------------------";
     }
 }

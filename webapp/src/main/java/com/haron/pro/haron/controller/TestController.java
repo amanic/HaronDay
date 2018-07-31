@@ -31,7 +31,12 @@ public class TestController {
     }
 
     @GetMapping("t3")
-    public String t3(){
-        return testService.test3();
+    public String t3(@RequestParam("openId") String openId){
+        return testService.test3(openId);
+    }
+
+    @GetMapping("t4")
+    public String t4(@RequestParam("openId") String openId){
+        return testService.test4(openId);
     }
 }
