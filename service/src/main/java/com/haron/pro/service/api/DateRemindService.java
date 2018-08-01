@@ -9,5 +9,5 @@ public interface DateRemindService {
 
     String remind(DateRemind remind);
 
-    String chat(String content);
+    String chat(String content,String openId);
 }

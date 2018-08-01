@@ -17,7 +17,7 @@
 
 
         <!--表名和实体名-->
-        <table tableName="chat_private" domainObjectName="ChatPrivate"
+        <table tableName="chat_log" domainObjectName="ChatLog"
         enableCountByExample="true"
         enableUpdateByExample="true"
         enableDeleteByExample="true"

@@ -283,9 +283,9 @@ public class HaronApplication {
 	 * @return the result
 	 */
 	@WxMessageMapping(type = WxMessage.Type.TEXT, wildcard = "*")
-	public String message(WxSession wxSession, String content) {
+	public String message(WxSession wxSession, String content,WxUser wxUser) {
 		wxSession.setAttribute("last", content);
-		return dateRemindService.chat(content);
+		return dateRemindService.chat(content,wxUser.getOpenId());
 	}
 
 	/*

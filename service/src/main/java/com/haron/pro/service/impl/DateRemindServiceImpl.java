@@ -8,8 +8,10 @@ import com.haron.pro.common.module.message.WxMessageTemplate;
 import com.haron.pro.common.module.message.WxUserMessage;
 import com.haron.pro.common.service.WxApiService;
 import com.haron.pro.common.util.HttpClientUtil;
+import com.haron.pro.dao.entity.ChatLog;
 import com.haron.pro.dao.entity.ChatPrivate;
 import com.haron.pro.dao.entity.DateRemind;
+import com.haron.pro.dao.mapper.ChatLogMapper;
 import com.haron.pro.dao.mapper.ChatPrivateMapper;
 import com.haron.pro.service.api.DateRemindService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class DateRemindServiceImpl implements DateRemindService {
     @Autowired
     ChatPrivateMapper chatPrivateMapper;
 
+    @Autowired
+    ChatLogMapper chatLogMapper;
+
     @Override
     public String remind(DateRemind remind) {
         WxUserMessage wxMessage = WxMessage.News.builder()
@@ -45,7 +50,11 @@ public class DateRemindServiceImpl implements DateRemindService {
     }
 
     @Override
-    public String chat(String content) {
+    public String chat(String content,String openId) {
+        ChatLog chatLog = new ChatLog();
+        chatLog.setUserSend(content);
+        chatLog.setOpenId(openId);
+        chatLog.setNickName(wxApiService.getUserInfo(openId).getNickName());
         ChatPrivate chatPrivate = chatPrivateMapper.selectByRecieve(content);
         if(chatPrivate!=null){
             return chatPrivate.getContent();
@@ -62,9 +71,11 @@ public class DateRemindServiceImpl implements DateRemindService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            chatLog.setUserRecieve(result);
+            chatLogMapper.insertSelective(chatLog);
             return result;
         }
-        return result;
     }
 
 }
