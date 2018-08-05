@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.haron.pro.common.module.message.WxMessage;
 import com.haron.pro.common.module.message.WxMessageTemplate;
+import com.haron.pro.common.module.message.WxTemplateMessage;
 import com.haron.pro.common.module.message.WxUserMessage;
 import com.haron.pro.common.service.WxApiService;
+import com.haron.pro.common.util.DateUtil;
 import com.haron.pro.common.util.HttpClientUtil;
 import com.haron.pro.dao.entity.ChatLog;
 import com.haron.pro.dao.entity.ChatPrivate;
@@ -38,15 +40,17 @@ public class DateRemindServiceImpl implements DateRemindService {
 
     @Override
     public String remind(DateRemind remind) {
-        WxUserMessage wxMessage = WxMessage.News.builder()
-                .addItem("测试图文消息", "测试", "https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-661501.jpg", "http://tczmh.club/bz/index.html")
-                .addItem("测试图文消息", "测试", "https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-679271.png", "https://github.com/amanic")
-                .addItem("测试图文消息", "测试", "https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-9394.jpg", "https://github.com/LauItachi/WeChatTest")
+        WxTemplateMessage wxTemplateMessage = WxTemplateMessage.templateBuilder()
+                .toUser(remind.getOpenId())
+                .data("theme","纪念日提醒啦","#DA70D6")
+                .data("time", DateUtil.convert2String(remind.getNextRemindDate(),"yyyy-MM-dd"),"#FF1493")
+                .data("content",remind.getContent(),"#4B0082")
+                .data("remark",remind.getRemark(),"#708090")
+                .templateId("EhB4WyjHG5Uv2rpHDb1rawckrtVcoN9KMN1jVuAaePw")
+                .url("http://tczmh.club/bz/")
                 .build();
-
-        wxMessageTemplate.sendMessage(remind.getOpenId(), wxMessage);
-
-        return null;
+        wxApiService.sendTemplateMessage(wxTemplateMessage);
+        return "成功";
     }
 
     @Override

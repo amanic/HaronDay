@@ -39,4 +39,10 @@ public class TestController {
     public String t4(@RequestParam("openId") String openId){
         return testService.test4(openId);
     }
+
+
+    @GetMapping("t5")
+    public String t5(@RequestParam("openId") String openId){
+        return testService.test5(openId);
+    }
 }

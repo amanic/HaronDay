@@ -2,6 +2,7 @@ package com.haron.pro.service.impl;
 
 import com.haron.pro.common.module.message.WxMessage;
 import com.haron.pro.common.module.message.WxMessageTemplate;
+import com.haron.pro.common.module.message.WxTemplateMessage;
 import com.haron.pro.common.module.message.WxUserMessage;
 import com.haron.pro.common.module.user.WxUser;
 import com.haron.pro.common.service.WxApiService;
@@ -72,5 +73,20 @@ public class TestServiceImpl implements TestService{
 //        wxMessage = WxMessage.mpNewsBuilder().mediaId("4576873954uhtgfvd").build();
         wxMessageTemplate.sendMessage(openId, wxMessage);
         return "--------------------------";
+    }
+
+    @Override
+    public String test5(String openId) {
+        WxTemplateMessage wxTemplateMessage = WxTemplateMessage.templateBuilder()
+                .toUser(openId)
+                .data("theme","结婚周年纪念日","#DA70D6")
+                .data("time","2020-10-01 21:00:00","#FF1493")
+                .data("content","那年今日，你嫁给我啦。","#4B0082")
+                .data("remark","今年那日，我们离婚啦。","#708090")
+                .templateId("EhB4WyjHG5Uv2rpHDb1rawckrtVcoN9KMN1jVuAaePw")
+                .url("http://tczmh.club/bz/")
+                .build();
+        wxApiService.sendTemplateMessage(wxTemplateMessage);
+        return "成功";
     }
 }

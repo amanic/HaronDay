@@ -4,6 +4,7 @@ import com.haron.pro.common.util.DateUtil;
 import com.haron.pro.dao.entity.DateRemind;
 import com.haron.pro.dao.mapper.DateRemindMapper;
 import com.haron.pro.service.api.DateRemindService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import java.util.List;
 /**
  * Created by chenhaitao on 2018/7/29.
  */
+@Slf4j
 @Component
 public class RemindDateSchedule {
 
@@ -22,10 +24,11 @@ public class RemindDateSchedule {
     @Autowired
     DateRemindService dateRemindService;
 
-//    @Scheduled(cron = "")
+    @Scheduled(cron = "0 0/15 * * * ?")
     public String remindDate(){
         List<DateRemind> dateReminds = dateRemindMapper.selectToRemind(DateUtil.getCurrentDate("yyyy-MM-dd HH:mm:ss"));
         if(null==dateReminds||dateReminds.size()==0){
+            log.info("当前没有用户需要提醒");
             return "当前没有用户需要提醒";
         }else {
             for (DateRemind e:dateReminds) {
