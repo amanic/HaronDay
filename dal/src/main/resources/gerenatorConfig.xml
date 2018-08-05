@@ -17,7 +17,7 @@
 
 
         <!--表名和实体名-->
-        <table tableName="chat_log" domainObjectName="ChatLog"
+        <table tableName="date_remind" domainObjectName="DateRemind"
         enableCountByExample="true"
         enableUpdateByExample="true"
         enableDeleteByExample="true"

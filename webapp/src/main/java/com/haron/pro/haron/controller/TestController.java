@@ -1,5 +1,6 @@
 package com.haron.pro.haron.controller;
 
+import com.haron.pro.haron.schedule.RemindDateSchedule;
 import com.haron.pro.service.api.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,9 @@ public class TestController {
 
     @Autowired
     TestService testService;
+
+    @Autowired
+    RemindDateSchedule remindDateSchedule;
 
 
 
@@ -43,6 +47,6 @@ public class TestController {
 
     @GetMapping("t5")
     public String t5(@RequestParam("openId") String openId){
-        return testService.test5(openId);
+        return remindDateSchedule.remindDate();
     }
 }

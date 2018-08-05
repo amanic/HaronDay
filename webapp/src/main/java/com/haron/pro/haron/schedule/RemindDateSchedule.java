@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,9 +32,12 @@ public class RemindDateSchedule {
             log.info("当前没有用户需要提醒");
             return "当前没有用户需要提醒";
         }else {
+            List<Integer> ids = new ArrayList<>(dateReminds.size());
             for (DateRemind e:dateReminds) {
+                ids.add(e.getId());
                 dateRemindService.remind(e);
             }
+            dateRemindMapper.updateRemindByIds(ids);
             return "成功";
         }
     }
