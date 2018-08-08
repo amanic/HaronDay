@@ -7,6 +7,7 @@ import com.haron.pro.common.module.message.WxMessage;
 import com.haron.pro.common.module.message.WxMessageTemplate;
 import com.haron.pro.common.module.message.WxTemplateMessage;
 import com.haron.pro.common.module.message.WxUserMessage;
+import com.haron.pro.common.module.user.WxUser;
 import com.haron.pro.common.service.WxApiService;
 import com.haron.pro.common.util.DateUtil;
 import com.haron.pro.common.util.HttpClientUtil;
@@ -15,9 +16,15 @@ import com.haron.pro.dao.entity.ChatPrivate;
 import com.haron.pro.dao.entity.DateRemind;
 import com.haron.pro.dao.mapper.ChatLogMapper;
 import com.haron.pro.dao.mapper.ChatPrivateMapper;
+import com.haron.pro.dao.mapper.DateRemindMapper;
 import com.haron.pro.service.api.DateRemindService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -37,6 +44,14 @@ public class DateRemindServiceImpl implements DateRemindService {
 
     @Autowired
     ChatLogMapper chatLogMapper;
+
+    @Autowired
+    JedisPool jedisPool;
+
+    @Autowired
+    DateRemindMapper dateRemindMapper;
+
+    private static final String signKey = "_sign";
 
     @Override
     public String remind(DateRemind remind) {
@@ -81,5 +96,35 @@ public class DateRemindServiceImpl implements DateRemindService {
             return result;
         }
     }
+
+    @Override
+    public WxMessage sign(WxUser wxUser) {
+        Jedis jedis = jedisPool.getResource();
+        if(jedis.get(wxUser.getOpenId()+signKey)==null){
+            int second = (int)DateUtil.diffSecond(new Date(),DateUtil.convert2Date(DateUtil.convert2String(new Date(),"yyyy-MM-dd")+" 23:59:59","yyyy-MM-dd HH:mm:ss"));
+            jedis.setex(wxUser.getOpenId()+signKey,second,"sign");
+            return WxMessage.textBuilder().content("签到啦٩(๑>◡<๑)۶，又离纪念日进了一步。").build();
+        }
+        return WxMessage.textBuilder().content("你今天已经签过到了╰（‵□′）╯").build();
+    }
+
+    @Override
+    public WxMessage next(WxUser wxUser) {
+        List<DateRemind> reminds = dateRemindMapper.selectUniqueToRemind(wxUser.getOpenId());
+        if(reminds==null||reminds.size()==0){
+            return WxMessage.newsBuilder().addItem("最近纪念日","您还没有需要提醒的纪念日哦","https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-674407.jpg","http://www.btkitty.com/").build();
+        }
+        WxMessage.NewsBuilder builder = WxMessage.newsBuilder();
+        for (DateRemind remind : reminds) {
+            builder.addItem("纪念日",remind.getContent(),"https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-674407.jpg","http://www.btkitty.com/");
+        }
+        return builder.build();
+    }
+
+
+//    public static void main(String[] args) {
+//        int i = (int)DateUtil.diffSecond(new Date(),DateUtil.convert2Date(DateUtil.convert2String(new Date(),"yyyy-MM-dd")+" 23:59:59","yyyy-MM-dd HH:mm:ss"));
+//        System.out.println(i);
+//    }
 
 }

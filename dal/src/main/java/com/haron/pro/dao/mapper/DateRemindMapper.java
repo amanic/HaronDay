@@ -41,6 +41,8 @@ public interface DateRemindMapper {
     
     List<DateRemind> selectToRemind(String nextRemindDate);
 
+    List<DateRemind> selectUniqueToRemind(String openId);
+
     Integer updateRemindByIds(List<Integer> list);
 
 }

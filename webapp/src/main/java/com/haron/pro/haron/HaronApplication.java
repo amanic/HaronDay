@@ -108,12 +108,12 @@ public class HaronApplication {
 
 	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.FIRST, name = "每日签到")
 	public WxMessage right1(WxUser wxUser) {
-		return WxMessage.textBuilder().content("签到啦٩(๑>◡<๑)۶，又离纪念日进了一步。╰（‵□′）╯").build();
+		return dateRemindService.sign(wxUser);
 	}
 
 	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.SECOND, name = "查看最近纪念日", type = WxButton.Type.LOCATION_SELECT)
 	public WxMessage right2(WxUser wxUser) {
-		return WxMessage.newsBuilder().addItem("title","description","https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-674407.jpg","http://www.btkitty.com/").build();
+		return dateRemindService.next(wxUser);
 	}
 
 	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.THIRD, name = "(●ﾟωﾟ●)", type = WxButton.Type.PIC_PHOTO_OR_ALBUM)

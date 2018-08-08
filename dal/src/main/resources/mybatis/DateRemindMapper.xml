@@ -349,6 +349,11 @@
     select * from date_remind where next_remind_date &lt;= #{nextRemindDate,jdbcType=VARCHAR} and to_be_remind = 1;
   </select>
 
+
+  <select id="selectUniqueToRemind" parameterType="String" resultMap="BaseResultMap">
+    select * from date_remind where open_id = #{openId,jdbcType=VARCHAR} and to_be_remind = 1 order by next_remind_date asc limit 3;
+  </select>
+
   <update id="updateRemindByIds" parameterType="list">
     update date_remind set to_be_remind = 0 where id in
     <foreach collection="list" separator="," item="item" open="(" close=")" index="index">
