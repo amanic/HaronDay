@@ -2,10 +2,12 @@ package com.haron.pro.haron.aop;
 
 import com.haron.pro.common.annotation.LogOperationTag;
 import com.haron.pro.dao.entity.OpLog;
+import com.haron.pro.dao.mapper.OpLogMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -19,6 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 @Slf4j
 public class OperationLogAop {
+
+    @Autowired
+    OpLogMapper opLogMapper;
 
     @Around(value = "@annotation(logOperationTag)")
     public Object LogOperation(ProceedingJoinPoint pjp, LogOperationTag logOperationTag) throws Throwable {
@@ -67,6 +72,7 @@ public class OperationLogAop {
         }
         Object o = pjp.proceed();
         opLog.setResult(o.toString());
+        opLogMapper.insertSelective(opLog);
         return o;
     }
 }
