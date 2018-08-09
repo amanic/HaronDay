@@ -17,7 +17,7 @@
 
 
         <!--表名和实体名-->
-        <table tableName="date_remind" domainObjectName="DateRemind"
+        <table tableName="op_log" domainObjectName="OpLog"
         enableCountByExample="true"
         enableUpdateByExample="true"
         enableDeleteByExample="true"
