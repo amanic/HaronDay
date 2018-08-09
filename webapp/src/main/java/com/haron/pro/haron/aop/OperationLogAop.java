@@ -5,14 +5,21 @@ import com.haron.pro.dao.entity.OpLog;
 import com.haron.pro.dao.mapper.OpLogMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
 /**
  * Created by chenhaitao on 2018/8/9.
@@ -28,13 +35,16 @@ public class OperationLogAop {
     @Around(value = "@annotation(logOperationTag)")
     public Object LogOperation(ProceedingJoinPoint pjp, LogOperationTag logOperationTag) throws Throwable {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        OpLog opLog = new OpLog();
-        if(!logOperationTag.required()){
+        if (!logOperationTag.required()) {
             return pjp.proceed();
         }
-        if(attributes==null){
+        OpLog opLog = new OpLog();
+        String className = pjp.getTarget().getClass().getName();
+        Signature signature = pjp.getSignature();
+        opLog.setApi(className + "." + signature.getName());
+        if (attributes == null) {
             log.error("请求为空");
-        }else {
+        } else {
             HttpServletRequest request = attributes.getRequest();
             String remoteAddr = request.getRemoteAddr();
             String forwarded = request.getHeader("X-Forwarded-For");
@@ -50,23 +60,33 @@ public class OperationLogAop {
                 if (realIp.equals(forwarded)) {
                     ip = realIp;
                 } else {
-                    if(forwarded != null){
+                    if (forwarded != null) {
                         forwarded = forwarded.split(",")[0];
                     }
                     ip = realIp + "/" + forwarded;
                 }
             }
             opLog.setIpAddress(ip);
-            log.info("请求Request = method->{},\npathinfo->{},\ncontextPath->{},\nrequestURI->{},\nrequestURL->{}",request.getMethod(),request.getPathInfo(),request.getContextPath(),request.getRequestURI(),request.getRequestURL());
+            log.info("请求Request = method->{},\npathinfo->{},\ncontextPath->{},\nrequestURI->{},\nrequestURL->{}", request.getMethod(), request.getPathInfo(), request.getContextPath(), request.getRequestURI(), request.getRequestURL());
         }
         Object[] args = pjp.getArgs();
-        if(args==null||args.length==0){
-            //TODO 没有参数
+        if (args == null || args.length == 0) {
             opLog.setParam("没有参数");
-        }else {
+        } else {
             StringBuilder params = new StringBuilder();
-            for (Object o: args) {
-                params.append(o.toString()+"***");
+            Object o = args[0];
+            params.append(o.toString());
+            PropertyDescriptor[] targetPds = BeanUtils.getPropertyDescriptors(o.getClass());  //得到属性数组
+            for (PropertyDescriptor targetPd : targetPds) {//通过循环对属性一一赋值
+                if (targetPd.getName().equals("openId")) {
+                    PropertyDescriptor sourcePd = BeanUtils.getPropertyDescriptor(o.getClass(), targetPd.getName());
+                    if (sourcePd != null && sourcePd.getReadMethod() != null) {//源对象是否具有读方法（getter）
+                        Method readMethod = sourcePd.getReadMethod();
+                        Object value = readMethod.invoke(o);//获取属性值
+                        opLog.setOpenId(value.toString());
+                    }
+                    break;
+                }
             }
             opLog.setParam(params.toString());
         }
@@ -75,4 +95,5 @@ public class OperationLogAop {
         opLogMapper.insertSelective(opLog);
         return o;
     }
+
 }

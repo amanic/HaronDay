@@ -25,6 +25,7 @@ import com.haron.pro.common.util.WxWebUtils;
 import com.haron.pro.common.web.WxWebUser;
 import com.haron.pro.dao.entity.DateRemind;
 import com.haron.pro.service.api.DateRemindService;
+import com.haron.pro.service.model.UnionParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -285,7 +286,10 @@ public class HaronApplication {
 	@WxMessageMapping(type = WxMessage.Type.TEXT, wildcard = "*")
 	public String message(WxSession wxSession, String content,WxUser wxUser) {
 		wxSession.setAttribute("last", content);
-		return dateRemindService.chat(content,wxUser.getOpenId());
+		UnionParam unionParam = new UnionParam();
+		unionParam.setStringParam(content);
+		unionParam.setOpenid(wxUser.getOpenId());
+		return dateRemindService.chat(unionParam);
 	}
 
 	/*

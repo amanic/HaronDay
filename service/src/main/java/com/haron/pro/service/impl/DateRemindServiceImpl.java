@@ -19,6 +19,7 @@ import com.haron.pro.dao.mapper.ChatLogMapper;
 import com.haron.pro.dao.mapper.ChatPrivateMapper;
 import com.haron.pro.dao.mapper.DateRemindMapper;
 import com.haron.pro.service.api.DateRemindService;
+import com.haron.pro.service.model.UnionParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
@@ -71,7 +72,9 @@ public class DateRemindServiceImpl implements DateRemindService {
 
     @Override
     @LogOperationTag
-    public String chat(String content,String openId) {
+    public String chat(UnionParam unionParam) {
+        String content = unionParam.getStringParam();
+        String openId = unionParam.getOpenid();
         ChatLog chatLog = new ChatLog();
         chatLog.setUserSend(content);
         chatLog.setOpenId(openId);
@@ -83,7 +86,7 @@ public class DateRemindServiceImpl implements DateRemindService {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("key","b6f73bda544046988c5731de14701a35");
         jsonObject.put("info",content);
-        String result = "我不知道你在说什么，我只知道皓然是最美的小姐姐！";
+        String result = "sso";
         try {
             String urlResult = HttpClientUtil.doPost("http://www.tuling123.com/openapi/api",jsonObject);
             JSONObject object = JSON.parseObject(urlResult);
