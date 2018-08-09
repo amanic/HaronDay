@@ -9,14 +9,14 @@ import lombok.Data;
 @Data
 public class UnionParam {
 
-    private String openid;
+    private String openId;
     private String StringParam;
     private WxMessage wxMessage;
 
     public String toString(){
         StringBuilder builder = new StringBuilder();
-        if(openid!=null){
-            builder.append("openId = {"+openid+"},");
+        if(openId!=null){
+            builder.append("openId = {"+openId+"},");
         }
         if(StringParam!=null){
             builder.append("StringParam = {"+StringParam+"},");
