@@ -111,7 +111,7 @@ public class HaronApplication {
 		return dateRemindService.sign(wxUser);
 	}
 
-	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.SECOND, name = "查看最近纪念日", type = WxButton.Type.LOCATION_SELECT)
+	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.SECOND, name = "查看最近纪念日")
 	public WxMessage right2(WxUser wxUser) {
 		return dateRemindService.next(wxUser);
 	}

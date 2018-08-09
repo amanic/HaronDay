@@ -28,7 +28,7 @@ logging:
 
 #redis配置
 redis:
-  host: 39.108.144.11
+  host: 127.0.0.1
   port: 6379
   timeout: 1000
   password: admin
