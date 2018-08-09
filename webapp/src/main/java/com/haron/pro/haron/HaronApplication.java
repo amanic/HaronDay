@@ -288,7 +288,7 @@ public class HaronApplication {
 		wxSession.setAttribute("last", content);
 		UnionParam unionParam = new UnionParam();
 		unionParam.setStringParam(content);
-		unionParam.setOpenid(wxUser.getOpenId());
+		unionParam.setOpenId(wxUser.getOpenId());
 		return dateRemindService.chat(unionParam);
 	}
 

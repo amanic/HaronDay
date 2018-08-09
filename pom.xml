@@ -164,6 +164,7 @@
 						<!--<bootclasspath>${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/jre/lib/jce.jar</bootclasspath>-->
                         <bootclasspath>${java.home}/lib/rt.jar:${java.home}/lib/jce.jar</bootclasspath>
 					</compilerArguments>
+					<skip>true</skip>
 				</configuration>
 			</plugin>
 		</plugins>

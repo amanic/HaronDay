@@ -74,7 +74,7 @@ public class DateRemindServiceImpl implements DateRemindService {
     @LogOperationTag
     public String chat(UnionParam unionParam) {
         String content = unionParam.getStringParam();
-        String openId = unionParam.getOpenid();
+        String openId = unionParam.getOpenId();
         ChatLog chatLog = new ChatLog();
         chatLog.setUserSend(content);
         chatLog.setOpenId(openId);
