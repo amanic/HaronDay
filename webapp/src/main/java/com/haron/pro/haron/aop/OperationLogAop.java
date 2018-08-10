@@ -64,13 +64,24 @@ public class OperationLogAop {
                 ip = request.getRemoteAddr();
                 }
             opLog.setIpAddress(ip);
-            log.info("请求Request = method->{},\npathinfo->{},\ncontextPath->{},\nrequestURI->{},\nrequestURL->{}",
+            log.info("请求Request = method->{},\npathinfo->{},\ncontextPath->{},\nrequestURI->{},\nservletContext->{}," +
+                            "authType->{},\ncookies->{},\nremoteUser->{},\nservletPath->{},\nuserPrincipal->{}," +
+                            "serverName->{},\nparameterMap->{},\nremoteAddr->{},\nrequestURL->{}",
                     request.getMethod(),
                     request.getPathInfo(),
                     request.getContextPath(),
                     request.getRequestURI(),
+                    request.getServletContext(),
+                    request.getAuthType(),
+                    request.getCookies(),
+                    request.getRemoteUser(),
+                    request.getServletPath(),
+                    request.getUserPrincipal().toString(),
+                    request.getServerName(),
+                    request.getParameterMap(),
+                    request.getRemoteAddr(),
                     request.getRequestURL());
-            log.info("******"+ JSON.toJSONString(request));
+            log.info("*********"+request.toString());
         }
         Object[] args = pjp.getArgs();
         if (args == null || args.length == 0) {
