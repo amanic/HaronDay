@@ -1,17 +1,15 @@
 package com.haron.pro.haron.aop;
 
-import com.alibaba.fastjson.JSON;
 import com.haron.pro.common.annotation.LogOperationTag;
 import com.haron.pro.dao.entity.OpLog;
 import com.haron.pro.dao.mapper.OpLogMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -20,7 +18,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 /**
  * Created by chenhaitao on 2018/8/9.
@@ -47,23 +44,37 @@ public class OperationLogAop {
             log.error("请求为空");
         } else {
             HttpServletRequest request = attributes.getRequest();
-            String ip = request.getHeader("x-forwarded-for");
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("Proxy-Client-IP");
+            String Xip = request.getHeader("X-Real-IP");
+            String XFor = request.getHeader("X-Forwarded-For");
+            if(StringUtils.isNotEmpty(XFor) && !"unKnown".equalsIgnoreCase(XFor)){
+                //多次反向代理后会有多个ip值，第一个ip才是真实ip
+                int index = XFor.indexOf(",");
+                if(index != -1){
+                    return XFor.substring(0,index);
+                }else{
+                    return XFor;
                 }
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("WL-Proxy-Client-IP");
-                }
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("HTTP_CLIENT_IP");
-                }
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-                }
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getRemoteAddr();
-                }
-            opLog.setIpAddress(ip);
+            }
+            XFor = Xip;
+            if(StringUtils.isNotEmpty(XFor) && !"unKnown".equalsIgnoreCase(XFor)){
+                return XFor;
+            }
+            if (StringUtils.isBlank(XFor) || "unknown".equalsIgnoreCase(XFor)) {
+                XFor = request.getHeader("Proxy-Client-IP");
+            }
+            if (StringUtils.isBlank(XFor) || "unknown".equalsIgnoreCase(XFor)) {
+                XFor = request.getHeader("WL-Proxy-Client-IP");
+            }
+            if (StringUtils.isBlank(XFor) || "unknown".equalsIgnoreCase(XFor)) {
+                XFor = request.getHeader("HTTP_CLIENT_IP");
+            }
+            if (StringUtils.isBlank(XFor) || "unknown".equalsIgnoreCase(XFor)) {
+                XFor = request.getHeader("HTTP_X_FORWARDED_FOR");
+            }
+            if (StringUtils.isBlank(XFor) || "unknown".equalsIgnoreCase(XFor)) {
+                XFor = request.getRemoteAddr();
+            }
+            opLog.setIpAddress(XFor);
             log.info("请求Request = method->{},\npathinfo->{},\ncontextPath->{},\nrequestURI->{},\nservletContext->{}," +
                             "\nauthType->{},\ncookies->{},\nremoteUser->{},\nservletPath->{}," +
                             "\nserverName->{},\nparameterMap->{},\nremoteAddr->{},\nrequestURL->{}",
@@ -83,6 +94,7 @@ public class OperationLogAop {
                     request.getRequestURL());
             log.info("*********"+request.toString());
         }
+
         Object[] args = pjp.getArgs();
         if (args == null || args.length == 0) {
             opLog.setParam("没有参数");
