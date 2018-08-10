@@ -1,5 +1,6 @@
 package com.haron.pro.haron.aop;
 
+import com.alibaba.fastjson.JSON;
 import com.haron.pro.common.annotation.LogOperationTag;
 import com.haron.pro.dao.entity.OpLog;
 import com.haron.pro.dao.mapper.OpLogMapper;
@@ -46,28 +47,30 @@ public class OperationLogAop {
             log.error("请求为空");
         } else {
             HttpServletRequest request = attributes.getRequest();
-            String remoteAddr = request.getRemoteAddr();
-            String forwarded = request.getHeader("X-Forwarded-For");
-            String realIp = request.getHeader("X-Real-IP");
-            String ip = "";
-            if (realIp == null) {
-                if (forwarded == null) {
-                    ip = remoteAddr;
-                } else {
-                    ip = remoteAddr + "/" + forwarded.split(",")[0];
+            String ip = request.getHeader("x-forwarded-for");
+            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getHeader("Proxy-Client-IP");
                 }
-            } else {
-                if (realIp.equals(forwarded)) {
-                    ip = realIp;
-                } else {
-                    if (forwarded != null) {
-                        forwarded = forwarded.split(",")[0];
-                    }
-                    ip = realIp + "/" + forwarded;
+            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getHeader("WL-Proxy-Client-IP");
                 }
-            }
+            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getHeader("HTTP_CLIENT_IP");
+                }
+            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+                }
+            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getRemoteAddr();
+                }
             opLog.setIpAddress(ip);
-            log.info("请求Request = method->{},\npathinfo->{},\ncontextPath->{},\nrequestURI->{},\nrequestURL->{}", request.getMethod(), request.getPathInfo(), request.getContextPath(), request.getRequestURI(), request.getRequestURL());
+            log.info("请求Request = method->{},\npathinfo->{},\ncontextPath->{},\nrequestURI->{},\nrequestURL->{}",
+                    request.getMethod(),
+                    request.getPathInfo(),
+                    request.getContextPath(),
+                    request.getRequestURI(),
+                    request.getRequestURL());
+            log.info("******"+ JSON.toJSONString(request));
         }
         Object[] args = pjp.getArgs();
         if (args == null || args.length == 0) {

@@ -103,6 +103,7 @@ public class DateRemindServiceImpl implements DateRemindService {
     }
 
     @Override
+    @LogOperationTag
     public WxMessage sign(WxUser wxUser) {
         Jedis jedis = jedisPool.getResource();
         if(jedis.get(wxUser.getOpenId()+signKey)==null){
@@ -114,6 +115,7 @@ public class DateRemindServiceImpl implements DateRemindService {
     }
 
     @Override
+    @LogOperationTag
     public WxMessage next(WxUser wxUser) {
         List<DateRemind> reminds = dateRemindMapper.selectUniqueToRemind(wxUser.getOpenId());
         if(reminds==null||reminds.size()==0){
