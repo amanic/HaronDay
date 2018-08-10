@@ -65,8 +65,8 @@ public class OperationLogAop {
                 }
             opLog.setIpAddress(ip);
             log.info("请求Request = method->{},\npathinfo->{},\ncontextPath->{},\nrequestURI->{},\nservletContext->{}," +
-                            "authType->{},\ncookies->{},\nremoteUser->{},\nservletPath->{},\nuserPrincipal->{}," +
-                            "serverName->{},\nparameterMap->{},\nremoteAddr->{},\nrequestURL->{}",
+                            "\nauthType->{},\ncookies->{},\nremoteUser->{},\nservletPath->{}," +
+                            "\nserverName->{},\nparameterMap->{},\nremoteAddr->{},\nrequestURL->{}",
                     request.getMethod(),
                     request.getPathInfo(),
                     request.getContextPath(),
@@ -76,7 +76,7 @@ public class OperationLogAop {
                     request.getCookies(),
                     request.getRemoteUser(),
                     request.getServletPath(),
-                    request.getUserPrincipal().toString(),
+//                    request.getUserPrincipal().toString(),
                     request.getServerName(),
                     request.getParameterMap(),
                     request.getRemoteAddr(),
