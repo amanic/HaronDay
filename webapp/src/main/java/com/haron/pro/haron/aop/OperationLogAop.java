@@ -53,6 +53,7 @@ public class OperationLogAop {
         Signature signature = pjp.getSignature();
         Object[] args = pjp.getArgs();
         String[] params =  getParamsName(pjp);
+
         if (args != null && args.length != 0){
             if(logOperationTag.isEntity()){
                 Object o = args[0];
@@ -69,10 +70,15 @@ public class OperationLogAop {
                     }
                 }
             }else {
-                Map<String, Object> nameAndArgs = getFieldsName(this.getClass(), className, signature.getName(), args);//获取被切参数名称及参数值
+                /*Map<String, Object> nameAndArgs = getFieldsName(this.getClass(), className, signature.getName(), args);//获取被切参数名称及参数值
                 int offset = 0;
                 for (String s: nameAndArgs.keySet()) {
                     nameAndArgs.put(params[offset],nameAndArgs.remove(s));
+                }*/
+                int offset = 0;
+                Map<String,Object> nameAndArgs = new HashMap<>();
+                for (String s : params) {
+                    nameAndArgs.put(s,args[offset++]);
                 }
                 openId.set(nameAndArgs.get("openId").toString());
                 param.set(nameAndArgs.toString());
