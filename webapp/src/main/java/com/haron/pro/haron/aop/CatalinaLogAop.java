@@ -74,7 +74,7 @@ public class CatalinaLogAop {
             openId = nameAndArgs.get("openId").toString();
             param = nameAndArgs.toString();
         }
-        log.info("接收到请求**********路径是：{}，openId是：{}，拦截参数是：{}。",classType+"."+clazzName+"."+methodName,openId,param);
+        log.info("接收到请求**********路径是：{}，openId是：{}，拦截参数是：{}。",clazzName+"."+methodName,openId,param);
         return joinPoint.proceed();
     }
 

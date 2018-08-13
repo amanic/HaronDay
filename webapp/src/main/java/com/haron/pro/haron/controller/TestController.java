@@ -47,7 +47,7 @@ public class TestController {
 
 
     @GetMapping("t5")
-    @LogCatalina
+    @LogCatalina(isEntity = false)
     public String t5(@RequestParam("openId") String openId,@RequestParam("value") String value){
         return remindDateSchedule.remindDate();
     }
