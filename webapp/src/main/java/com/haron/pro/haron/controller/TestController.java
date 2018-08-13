@@ -1,5 +1,6 @@
 package com.haron.pro.haron.controller;
 
+import com.haron.pro.common.annotation.LogCatalina;
 import com.haron.pro.haron.schedule.RemindDateSchedule;
 import com.haron.pro.service.api.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,8 @@ public class TestController {
 
 
     @GetMapping("t5")
-    public String t5(@RequestParam("openId") String openId){
+    @LogCatalina
+    public String t5(@RequestParam("openId") String openId,@RequestParam("value") String value){
         return remindDateSchedule.remindDate();
     }
 }
