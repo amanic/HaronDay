@@ -5,10 +5,6 @@ import com.haron.pro.dao.entity.OpLog;
 import com.haron.pro.dao.mapper.OpLogMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.javassist.*;
-import org.apache.ibatis.javassist.bytecode.CodeAttribute;
-import org.apache.ibatis.javassist.bytecode.LocalVariableAttribute;
-import org.apache.ibatis.javassist.bytecode.MethodInfo;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -36,9 +32,9 @@ import java.util.Map;
 @Slf4j
 public class OperationLogAop {
 
-    private ThreadLocal<String> openId;
+    private ThreadLocal<String> openId = new ThreadLocal<>();
 
-    private ThreadLocal<String> param;
+    private ThreadLocal<String> param = new ThreadLocal<>();
 
     @Autowired
     OpLogMapper opLogMapper;
@@ -133,6 +129,7 @@ public class OperationLogAop {
         return XFor;
     }
 
+/*
 
     private Map<String, Object> getFieldsName(Class cls, String clazzName, String methodName, Object[] args) throws NotFoundException {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -157,6 +154,7 @@ public class OperationLogAop {
         }
         return map;
     }
+*/
 
 
     private static HashMap<String, Class> map = new HashMap<String, Class>() {
