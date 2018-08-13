@@ -36,6 +36,18 @@ public class OperationLogAop {
 
     private ThreadLocal<String> param = new ThreadLocal<>();
 
+    private static HashMap<String, Class> map = new HashMap<String, Class>() {
+        {
+            put("java.lang.Integer", int.class);
+            put("java.lang.Double", double.class);
+            put("java.lang.Float", float.class);
+            put("java.lang.Long", long.class);
+            put("java.lang.Short", short.class);
+            put("java.lang.Boolean", boolean.class);
+            put("java.lang.Char", char.class);
+        }
+    };
+
     @Autowired
     OpLogMapper opLogMapper;
 
@@ -49,7 +61,6 @@ public class OperationLogAop {
         Signature signature = pjp.getSignature();
         Object[] args = pjp.getArgs();
         String[] params =  getParamsName(pjp);
-
         if (args != null && args.length != 0){
             if(logOperationTag.isEntity()){
                 Object o = args[0];
@@ -80,8 +91,8 @@ public class OperationLogAop {
                 param.set(nameAndArgs.toString());
             }
         }
-        Object o = pjp.proceed();
         log.info("接收到请求**********路径是：{}，openId是：{}，拦截参数是：{}。",className+"."+signature.getName(),openId.get(),param.get());
+        Object o = pjp.proceed();
         if(logOperationTag.required()){
             OpLog opLog = new OpLog();
             opLog.setIpAddress(getIpAdrress(attributes.getRequest()));
@@ -156,18 +167,6 @@ public class OperationLogAop {
     }
 */
 
-
-    private static HashMap<String, Class> map = new HashMap<String, Class>() {
-        {
-            put("java.lang.Integer", int.class);
-            put("java.lang.Double", double.class);
-            put("java.lang.Float", float.class);
-            put("java.lang.Long", long.class);
-            put("java.lang.Short", short.class);
-            put("java.lang.Boolean", boolean.class);
-            put("java.lang.Char", char.class);
-        }
-    };
     //返回方法的参数名
     private static String[] getParamsName(JoinPoint joinPoint) throws ClassNotFoundException, NoSuchMethodException {
         String classType = joinPoint.getTarget().getClass().getName();
