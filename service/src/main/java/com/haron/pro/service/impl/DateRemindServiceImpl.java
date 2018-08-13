@@ -71,10 +71,8 @@ public class DateRemindServiceImpl implements DateRemindService {
     }
 
     @Override
-    @LogOperationTag
-    public String chat(UnionParam unionParam) {
-        String content = unionParam.getStringParam();
-        String openId = unionParam.getOpenId();
+    @LogOperationTag(isEntity = false)
+    public String chat(String content, String openId) {
         ChatLog chatLog = new ChatLog();
         chatLog.setUserSend(content);
         chatLog.setOpenId(openId);
@@ -119,11 +117,11 @@ public class DateRemindServiceImpl implements DateRemindService {
     public WxMessage next(WxUser wxUser) {
         List<DateRemind> reminds = dateRemindMapper.selectUniqueToRemind(wxUser.getOpenId());
         if(reminds==null||reminds.size()==0){
-            return WxMessage.newsBuilder().addItem("最近纪念日","您还没有需要提醒的纪念日哦","https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-674407.jpg","http://www.btkitty.com/").build();
+            return WxMessage.newsBuilder().addItem("最近纪念日","您还没有需要提醒的纪念日哦","https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-674407.jpg","http://tczmh.club/bz/").build();
         }
         WxMessage.NewsBuilder builder = WxMessage.newsBuilder();
         for (DateRemind remind : reminds) {
-            builder.addItem("纪念日",remind.getContent(),"https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-674407.jpg","http://www.btkitty.com/");
+            builder.addItem("纪念日",remind.getContent(),"https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-674407.jpg","http://tczmh.club/bz/");
         }
         return builder.build();
     }

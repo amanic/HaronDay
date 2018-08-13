@@ -286,10 +286,7 @@ public class HaronApplication {
 	@WxMessageMapping(type = WxMessage.Type.TEXT, wildcard = "*")
 	public String message(WxSession wxSession, String content,WxUser wxUser) {
 		wxSession.setAttribute("last", content);
-		UnionParam unionParam = new UnionParam();
-		unionParam.setStringParam(content);
-		unionParam.setOpenId(wxUser.getOpenId());
-		return dateRemindService.chat(unionParam);
+		return dateRemindService.chat(content,wxUser.getOpenId());
 	}
 
 	/*

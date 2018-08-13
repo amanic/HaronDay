@@ -46,8 +46,6 @@ public class OperationLogAop {
         if (!logOperationTag.required()) {
             return pjp.proceed();
         }
-
-
         String className = pjp.getTarget().getClass().getName();
         Signature signature = pjp.getSignature();
         Object[] args = pjp.getArgs();

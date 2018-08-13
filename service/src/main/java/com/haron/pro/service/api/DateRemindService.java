@@ -12,7 +12,7 @@ public interface DateRemindService {
 
     String remind(DateRemind remind);
 
-    String chat(UnionParam unionParam);
+    String chat(String cpntent,String openId);
 
     WxMessage sign(WxUser wxUser);
 
