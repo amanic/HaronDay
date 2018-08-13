@@ -1,6 +1,6 @@
 package com.haron.pro.haron.controller;
 
-import com.haron.pro.common.annotation.LogOperationTag;
+import com.haron.pro.common.annotation.LogCatalina;
 import com.haron.pro.haron.schedule.RemindDateSchedule;
 import com.haron.pro.service.api.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,14 +41,14 @@ public class TestController {
     }
 
     @GetMapping("t4")
-    @LogOperationTag(isEntity = false)
+    @LogCatalina(isEntity = false)
     public String t4(String openId){
         return testService.test4(openId);
     }
 
 
     @GetMapping("t5")
-    @LogOperationTag(isEntity = false)
+    @LogCatalina(isEntity = false)
     public String t5(@RequestParam("openId") String openId,@RequestParam("value") String value){
         return remindDateSchedule.remindDate();
     }

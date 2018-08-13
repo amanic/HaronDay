@@ -3,6 +3,7 @@ package com.haron.pro.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.haron.pro.common.annotation.LogCatalina;
 import com.haron.pro.common.annotation.LogOperationTag;
 import com.haron.pro.common.module.message.WxMessage;
 import com.haron.pro.common.module.message.WxMessageTemplate;
@@ -71,7 +72,7 @@ public class DateRemindServiceImpl implements DateRemindService {
     }
 
     @Override
-    @LogOperationTag(isEntity = false)
+    @LogCatalina(isEntity = false)
     public String chat(String content, String openId) {
         ChatLog chatLog = new ChatLog();
         chatLog.setUserSend(content);
