@@ -5,6 +5,10 @@ import com.haron.pro.dao.entity.OpLog;
 import com.haron.pro.dao.mapper.OpLogMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.javassist.*;
+import org.apache.ibatis.javassist.bytecode.CodeAttribute;
+import org.apache.ibatis.javassist.bytecode.LocalVariableAttribute;
+import org.apache.ibatis.javassist.bytecode.MethodInfo;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -18,6 +22,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by chenhaitao on 2018/8/9.
@@ -26,6 +32,10 @@ import java.lang.reflect.Method;
 @Component
 @Slf4j
 public class OperationLogAop {
+
+    private ThreadLocal<String> openId;
+
+    private ThreadLocal<String> param;
 
     @Autowired
     OpLogMapper opLogMapper;
@@ -36,58 +46,43 @@ public class OperationLogAop {
         if (!logOperationTag.required()) {
             return pjp.proceed();
         }
-        OpLog opLog = new OpLog();
+
+
         String className = pjp.getTarget().getClass().getName();
         Signature signature = pjp.getSignature();
-        opLog.setApi(className + "." + signature.getName());
-        if (attributes == null) {
-            log.error("请求为空");
-        } else {
-            HttpServletRequest request = attributes.getRequest();
-            opLog.setIpAddress(getIpAdrress(request));
-            log.info("请求Request = method->{},\npathinfo->{},\ncontextPath->{},\nrequestURI->{},\nservletContext->{}," +
-                            "\nauthType->{},\ncookies->{},\nremoteUser->{},\nservletPath->{}," +
-                            "\nserverName->{},\nparameterMap->{},\nremoteAddr->{},\nrequestURL->{}",
-                    request.getMethod(),
-                    request.getPathInfo(),
-                    request.getContextPath(),
-                    request.getRequestURI(),
-                    request.getServletContext(),
-                    request.getAuthType(),
-                    request.getCookies(),
-                    request.getRemoteUser(),
-                    request.getServletPath(),
-//                    request.getUserPrincipal().toString(),
-                    request.getServerName(),
-                    request.getParameterMap(),
-                    request.getRemoteAddr(),
-                    request.getRequestURL());
-            log.info("*********"+request.toString());
-        }
         Object[] args = pjp.getArgs();
-        if (args == null || args.length == 0) {
-            opLog.setParam("没有参数");
-        } else {
-            StringBuilder params = new StringBuilder();
-            Object o = args[0];
-            params.append(o.toString());
-            PropertyDescriptor[] targetPds = BeanUtils.getPropertyDescriptors(o.getClass());  //得到属性数组
-            for (PropertyDescriptor targetPd : targetPds) {//通过循环对属性一一赋值
-                if (targetPd.getName().equals("openId")) {
-                    PropertyDescriptor sourcePd = BeanUtils.getPropertyDescriptor(o.getClass(), targetPd.getName());
-                    if (sourcePd != null && sourcePd.getReadMethod() != null) {//源对象是否具有读方法（getter）
-                        Method readMethod = sourcePd.getReadMethod();
-                        Object value = readMethod.invoke(o);//获取属性值
-                        opLog.setOpenId(value.toString());
+        if (args != null && args.length != 0){
+            if(logOperationTag.isEntity()){
+                Object o = args[0];
+                param.set(o.toString());
+                PropertyDescriptor[] targetPds = BeanUtils.getPropertyDescriptors(o.getClass());  //得到属性数组
+                for (PropertyDescriptor targetPd : targetPds) {//通过循环对属性一一赋值
+                    if (targetPd.getName().equals("openId")) {
+                        PropertyDescriptor sourcePd = BeanUtils.getPropertyDescriptor(o.getClass(), targetPd.getName());
+                        if (sourcePd != null && sourcePd.getReadMethod() != null) {//源对象是否具有读方法（getter）
+                            Method readMethod = sourcePd.getReadMethod();
+                            openId.set(readMethod.invoke(o).toString());
+                        }
+                        break;
                     }
-                    break;
                 }
+            }else {
+                Map<String, Object> nameAndArgs = getFieldsName(this.getClass(), className, signature.getName(), args);//获取被切参数名称及参数值
+                openId.set(nameAndArgs.get("openId").toString());
+                param.set(nameAndArgs.toString());
             }
-            opLog.setParam(params.toString());
         }
         Object o = pjp.proceed();
-        opLog.setResult(o.toString());
-        opLogMapper.insertSelective(opLog);
+        log.info("接收到请求**********路径是：{}，openId是：{}，拦截参数是：{}。",className+"."+signature.getName(),openId.get(),param.get());
+        if(logOperationTag.required()){
+            OpLog opLog = new OpLog();
+            opLog.setIpAddress(getIpAdrress(attributes.getRequest()));
+            opLog.setResult(o.toString());
+            opLog.setApi(className + "." + signature.getName());
+            opLog.setParam(param.get());
+            opLog.setOpenId(openId.get());
+            opLogMapper.insertSelective(opLog);
+        }
         return o;
     }
 
@@ -124,5 +119,30 @@ public class OperationLogAop {
             XFor = request.getRemoteAddr();
         }
         return XFor;
+    }
+
+
+    private Map<String, Object> getFieldsName(Class cls, String clazzName, String methodName, Object[] args) throws NotFoundException {
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        ClassPool pool = ClassPool.getDefault();
+        //ClassClassPath classPath = new ClassClassPath(this.getClass());
+        ClassClassPath classPath = new ClassClassPath(cls);
+        pool.insertClassPath(classPath);
+
+        CtClass cc = pool.get(clazzName);
+        CtMethod cm = cc.getDeclaredMethod(methodName);
+        MethodInfo methodInfo = cm.getMethodInfo();
+        CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
+        LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute.getAttribute(LocalVariableAttribute.tag);
+        if (attr == null) {
+            // exception
+        }
+        // String[] paramNames = new String[cm.getParameterTypes().length];
+        int pos = Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
+        for (int i = 0; i < cm.getParameterTypes().length; i++) {
+            map.put(attr.variableName(i + pos), args[i]);//paramNames即参数名
+        }
+        return map;
     }
 }

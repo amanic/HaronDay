@@ -14,7 +14,22 @@ public @interface LogOperationTag {
 
     String value() default "";
 
+    /**
+     * 是否需要入库
+     * @return
+     */
     boolean required() default true;
 
-    boolean logbase() default false;
+
+    /**
+     * 是否是实体类，非实体类的情况下是多参数传值
+     * @return
+     */
+    boolean isEntity() default true;
+
+    /**
+     * 需要额外动作的参数名
+     * @return
+     */
+    String propertyName() default "";
 }
