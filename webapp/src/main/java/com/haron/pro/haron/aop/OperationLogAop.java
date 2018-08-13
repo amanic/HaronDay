@@ -9,12 +9,15 @@ import org.apache.ibatis.javassist.*;
 import org.apache.ibatis.javassist.bytecode.CodeAttribute;
 import org.apache.ibatis.javassist.bytecode.LocalVariableAttribute;
 import org.apache.ibatis.javassist.bytecode.MethodInfo;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.DefaultParameterNameDiscoverer;
+import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -49,6 +52,7 @@ public class OperationLogAop {
         String className = pjp.getTarget().getClass().getName();
         Signature signature = pjp.getSignature();
         Object[] args = pjp.getArgs();
+        String[] params =  getParamsName(pjp);
         if (args != null && args.length != 0){
             if(logOperationTag.isEntity()){
                 Object o = args[0];
@@ -66,6 +70,10 @@ public class OperationLogAop {
                 }
             }else {
                 Map<String, Object> nameAndArgs = getFieldsName(this.getClass(), className, signature.getName(), args);//获取被切参数名称及参数值
+                int offset = 0;
+                for (String s: nameAndArgs.keySet()) {
+                    nameAndArgs.put(params[offset],nameAndArgs.remove(s));
+                }
                 openId.set(nameAndArgs.get("openId").toString());
                 param.set(nameAndArgs.toString());
             }
@@ -143,4 +151,38 @@ public class OperationLogAop {
         }
         return map;
     }
+
+
+    private static HashMap<String, Class> map = new HashMap<String, Class>() {
+        {
+            put("java.lang.Integer", int.class);
+            put("java.lang.Double", double.class);
+            put("java.lang.Float", float.class);
+            put("java.lang.Long", long.class);
+            put("java.lang.Short", short.class);
+            put("java.lang.Boolean", boolean.class);
+            put("java.lang.Char", char.class);
+        }
+    };
+    //返回方法的参数名
+    private static String[] getParamsName(JoinPoint joinPoint) throws ClassNotFoundException, NoSuchMethodException {
+        String classType = joinPoint.getTarget().getClass().getName();
+        String methodName = joinPoint.getSignature().getName();
+        Object[] args = joinPoint.getArgs();
+        Class<?>[] classes = new Class[args.length];
+        for (int k = 0; k < args.length; k++) {
+            if (!args[k].getClass().isPrimitive()) {
+                //获取的是封装类型而不是基础类型
+                String result = args[k].getClass().getName();
+                Class s = map.get(result);
+                classes[k] = s == null ? args[k].getClass() : s;
+            }
+        }
+        ParameterNameDiscoverer pnd = new DefaultParameterNameDiscoverer();
+        //获取指定的方法，第二个参数可以不传，但是为了防止有重载的现象，还是需要传入参数的类型
+        Method method = Class.forName(classType).getMethod(methodName, classes);
+        String[] parameterNames = pnd.getParameterNames(method);
+        return parameterNames;
+    }
+
 }
