@@ -68,7 +68,7 @@ public class OperationLogAop {
                 Object o = args[0];
                 ObjectMapper objectMapper = new ObjectMapper();
                 String objString = objectMapper.writeValueAsString(o);
-                if(properties==null||!properties.trim().equals("")){
+                if(properties==null||properties.trim().equals("")){
                     param.set(objString);
                 }else {
                     StringBuilder sb = new StringBuilder();
