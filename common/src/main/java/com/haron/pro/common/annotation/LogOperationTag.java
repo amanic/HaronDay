@@ -28,7 +28,7 @@ public @interface LogOperationTag {
     boolean isEntity() default true;
 
     /**
-     * 需要额外动作的参数名
+     * 需要额外动作的参数名 多个用,隔开
      * @return
      */
     String propertyName() default "";

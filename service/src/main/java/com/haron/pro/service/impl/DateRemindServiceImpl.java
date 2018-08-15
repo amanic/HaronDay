@@ -3,6 +3,7 @@ package com.haron.pro.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.haron.pro.common.annotation.LogOperationTag;
 import com.haron.pro.common.module.message.WxMessage;
 import com.haron.pro.common.module.message.WxMessageTemplate;
@@ -69,7 +70,7 @@ public class DateRemindServiceImpl implements DateRemindService {
     }
 
     @Override
-    @LogOperationTag(isEntity = false)
+    @LogOperationTag(isEntity = false,propertyName = "content,openId")
     public String chat(String content, String openId) {
         ChatLog chatLog = new ChatLog();
         chatLog.setUserSend(content);
@@ -85,6 +86,7 @@ public class DateRemindServiceImpl implements DateRemindService {
         String result = "sso";
         try {
             String urlResult = HttpClientUtil.doPost("http://www.tuling123.com/openapi/api",jsonObject);
+            ObjectMapper objectMapper = new ObjectMapper();
             JSONObject object = JSON.parseObject(urlResult);
             if(object.getInteger("code")==100000){
                 result = object.getString("text");
@@ -99,7 +101,7 @@ public class DateRemindServiceImpl implements DateRemindService {
     }
 
     @Override
-    @LogOperationTag
+    @LogOperationTag(propertyName = "openId,subscribeTime,nickName,city,sex")
     public WxMessage sign(WxUser wxUser) {
         Jedis jedis = jedisPool.getResource();
         if(jedis.get(wxUser.getOpenId()+signKey)==null){
@@ -111,7 +113,7 @@ public class DateRemindServiceImpl implements DateRemindService {
     }
 
     @Override
-    @LogOperationTag
+    @LogOperationTag(propertyName = "openId,subscribeTime,nickName,city,sex")
     public WxMessage next(WxUser wxUser) {
         List<DateRemind> reminds = dateRemindMapper.selectUniqueToRemind(wxUser.getOpenId());
         if(reminds==null||reminds.size()==0){

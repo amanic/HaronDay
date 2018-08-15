@@ -1,5 +1,7 @@
 package com.haron.pro.haron.aop;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.haron.pro.common.annotation.LogOperationTag;
 import com.haron.pro.dao.entity.OpLog;
 import com.haron.pro.dao.mapper.OpLogMapper;
@@ -60,11 +62,22 @@ public class OperationLogAop {
         String className = pjp.getTarget().getClass().getName();
         Signature signature = pjp.getSignature();
         Object[] args = pjp.getArgs();
-        String[] params =  getParamsName(pjp);
+        String properties = logOperationTag.propertyName();
         if (args != null && args.length != 0){
             if(logOperationTag.isEntity()){
                 Object o = args[0];
-                param.set(o.toString());
+                ObjectMapper objectMapper = new ObjectMapper();
+                String objString = objectMapper.writeValueAsString(o);
+                if(properties==null||!properties.trim().equals("")){
+                    param.set(objString);
+                }else {
+                    StringBuilder sb = new StringBuilder();
+                    JsonNode node = objectMapper.readTree(objString);
+                    for (String s:properties.split(",")) {
+                        sb.append(s+"={"+node.get(s)+"},");
+                    }
+                    param.set(sb.toString().substring(0,sb.length()-1));
+                }
                 PropertyDescriptor[] targetPds = BeanUtils.getPropertyDescriptors(o.getClass());  //得到属性数组
                 for (PropertyDescriptor targetPd : targetPds) {//通过循环对属性一一赋值
                     if (targetPd.getName().equals("openId")) {
@@ -82,13 +95,18 @@ public class OperationLogAop {
                 for (String s: nameAndArgs.keySet()) {
                     nameAndArgs.put(params[offset],nameAndArgs.remove(s));
                 }*/
+                String[] params =  getParamsName(pjp);
                 int offset = 0;
-                Map<String,Object> nameAndArgs = new HashMap<>();
+                MyMap<String,Object> nameAndArgs = new MyMap<>();
                 for (String s : params) {
                     nameAndArgs.put(s,args[offset++]);
                 }
                 openId.set(nameAndArgs.get("openId").toString());
-                param.set(nameAndArgs.toString());
+                if(properties==null||properties.trim().equals("")){
+                    param.set(nameAndArgs.toString());
+                }else {
+                    param.set(nameAndArgs.toDataBaseString());
+                }
             }
         }
         log.info("接收到请求**********路径是：{}，openId是：{}，拦截参数是：{}。",className+"."+signature.getName(),openId.get(),param.get());
@@ -186,6 +204,20 @@ public class OperationLogAop {
         Method method = Class.forName(classType).getMethod(methodName, classes);
         String[] parameterNames = pnd.getParameterNames(method);
         return parameterNames;
+    }
+
+    public static class MyMap<K,V> extends HashMap<K,V>{
+
+        public String toDataBaseString(String...strings) {
+            StringBuilder sb = new StringBuilder();
+            for (String s:strings) {
+                if(this.get(s)!=null&&!this.get(s).toString().trim().equals("")){
+                    sb.append(s+"={"+this.get(s)+"},");
+                }
+            }
+            return sb.toString().substring(0,sb.length()-1);
+        }
+
     }
 
 }
