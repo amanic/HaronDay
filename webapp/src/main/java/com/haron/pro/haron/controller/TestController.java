@@ -1,6 +1,7 @@
 package com.haron.pro.haron.controller;
 
 import com.haron.pro.common.annotation.LogOperationTag;
+import com.haron.pro.common.module.user.WxUser;
 import com.haron.pro.haron.schedule.RemindDateSchedule;
 import com.haron.pro.service.api.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +52,15 @@ public class TestController {
     @LogOperationTag(isEntity = false)
     public String t5(@RequestParam("openId") String openId,@RequestParam("value") String value){
         return remindDateSchedule.remindDate();
+    }
+
+    /**
+     * 测试{@link org.springframework.web.method.support.HandlerMethodArgumentResolver}的supportsParameter
+     * @param wxUser
+     * @return openID
+     */
+    @GetMapping("t6")
+    public String t6(WxUser wxUser){
+        return wxUser.getOpenId();
     }
 }

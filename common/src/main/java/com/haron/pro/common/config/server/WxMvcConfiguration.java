@@ -426,7 +426,7 @@ public class WxMvcConfiguration implements ImportAware {
         }
 
         /**
-         * WebMvcConfigurationSupport添加的MessageConverter不会被添加到SpringBoot全局的HttpMessageConverters中
+         * WebMvcConfigurationØ添加的MessageConverter不会被添加到SpringBoot全局的HttpMessageConverters中
          */
         /*@Override
         public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
