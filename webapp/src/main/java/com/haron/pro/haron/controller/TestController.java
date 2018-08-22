@@ -1,6 +1,7 @@
 package com.haron.pro.haron.controller;
 
 import com.haron.pro.common.annotation.LogOperationTag;
+import com.haron.pro.common.annotation.WxMapping;
 import com.haron.pro.common.module.user.WxUser;
 import com.haron.pro.haron.schedule.RemindDateSchedule;
 import com.haron.pro.service.api.TestService;
@@ -60,6 +61,7 @@ public class TestController {
      * @return openID
      */
     @GetMapping("t6")
+    @WxMapping
     public String t6(WxUser wxUser){
         return wxUser.getOpenId();
     }
