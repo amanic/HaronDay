@@ -121,10 +121,10 @@ public class HaronApplication {
 			group = WxButton.Group.RIGHT,
 			order = WxButton.Order.THIRD,
 			url = "http://haron.natapp1.cc/temp/error.html",
-			name = "反对陈海涛帅！")
+			name = "反对作者帅！")
 	@WxAsyncMessage
 	public WxMessage right3(WxRequest wxRequest) {
-		return WxMessage.Text.builder().content("点击了菜单链接").build();
+		return WxMessage.Text.builder().content("网页都不对劲了，他是最帅的😍！").build();
 	}
 
 	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.THIRD, name = "右4", type = WxButton.Type.PIC_WEIXIN)
