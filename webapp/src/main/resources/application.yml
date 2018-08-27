@@ -94,7 +94,8 @@ wx:
 
 
 #文件信息配置
-file:
-  img:
-    savePath: /usr/local/tomcat/haron
-    showPath: /temp/
+spring:
+  mvc:
+    static-path-pattern: /temp/*
+  resources:
+    static-locations: /usr/local/tomcat/haron
