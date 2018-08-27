@@ -19,6 +19,7 @@ import com.haron.pro.common.service.WxApiService;
 import com.haron.pro.common.service.WxExtendService;
 import com.haron.pro.common.util.WxWebUtils;
 import com.haron.pro.common.web.WxWebUser;
+import com.haron.pro.service.api.AlbumService;
 import com.haron.pro.service.api.DateRemindService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -66,6 +67,9 @@ public class HaronApplication {
 
 	@Autowired
 	JedisPool jedisPool;
+
+	@Autowired
+	AlbumService albumService;
 
 	/**
 	 * 定义微信菜单
@@ -406,13 +410,6 @@ public class HaronApplication {
 
 	@WxMessageMapping(type = WxMessage.Type.IMAGE)
 	public WxMessage getPicUrl(WxUser wxUser,WxRequest wxRequest){
-		//TODO 结构优化，service和dal，这里需将图片地址入库并且定时更新图片地址。
-		Jedis jedis = jedisPool.getResource();
-		if(null==jedis.get(wxUser.getOpenId())){
-			return WxMessage.textBuilder().content("图片不错ヽ(･ω･´ﾒ),若想要上传图片到纪念日相册，请点击菜单：纪念日-->上传图片到纪念册。").toGroup(wxUser.getOpenId()).build();
-		}
-		jedis.del(wxUser.getOpenId());
-		jedis.close();
-		return WxMessage.textBuilder().content("上传成功，图片链接为："+wxRequest.getBody().getPicUrl()).toGroup(wxUser.getOpenId()).build();
+		return albumService.insertPhoto(wxUser,wxRequest);
 	}
 }
