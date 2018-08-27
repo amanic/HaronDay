@@ -91,3 +91,10 @@ wx:
     interceptor:
       include-patterns:
         - /wx/**
+
+
+#文件信息配置
+file:
+  img:
+    savePath: /usr/local/tomcat/haron
+    showPath: /temp/

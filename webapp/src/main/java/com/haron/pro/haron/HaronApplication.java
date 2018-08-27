@@ -117,9 +117,9 @@ public class HaronApplication {
 		return dateRemindService.next(wxUser);
 	}
 
-	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.THIRD, name = "(●ﾟωﾟ●)", type = WxButton.Type.PIC_PHOTO_OR_ALBUM)
-	public WxMessage right3(WxUser wxUser) {
-		return WxMessage.newsBuilder().addItem("title","description","https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-674407.jpg","http://www.btkitty.com/").build();
+	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.THIRD, name = "(●ﾟωﾟ●)", type = WxButton.Type.CLICK)
+	public String right3(WxUser wxUser) {
+		return "http://haron.natapp1.cc/temp/error.html";
 	}
 
 	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.THIRD, name = "右4", type = WxButton.Type.PIC_WEIXIN)
