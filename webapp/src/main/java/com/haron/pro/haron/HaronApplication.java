@@ -121,7 +121,7 @@ public class HaronApplication {
 			group = WxButton.Group.RIGHT,
 			order = WxButton.Order.THIRD,
 			url = "http://haron.natapp1.cc/temp/error.html",
-			name = "反对作者帅！")
+			name = "反对作者帅")
 	@WxAsyncMessage
 	public WxMessage right3(WxRequest wxRequest) {
 		return WxMessage.Text.builder().content("网页都不对劲了，他是最帅的！").build();
@@ -134,9 +134,14 @@ public class HaronApplication {
 		jedis.close();
 	}
 
-	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.FIFTH, name = "右5", type = WxButton.Type.VIEW, url = "http://www.btkitty.com/")
-	public WxMessage right5(WxUser wxUser) {
-		return WxMessage.newsBuilder().addItem("title","description","https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-674407.jpg","http://www.btkitty.com/").build();
+	@WxButton(type = WxButton.Type.VIEW,
+			group = WxButton.Group.RIGHT,
+			order = WxButton.Order.FIFTH,
+			url = "http://haron.natapp1.cc/temp/albumExample/index.html",
+			name = "纪念相册")
+	@WxAsyncMessage
+	public WxMessage right5(WxRequest wxRequest) {
+		return WxMessage.Text.builder().content("(￣.￣)").build();
 	}
 
 
