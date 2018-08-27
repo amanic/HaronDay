@@ -77,7 +77,7 @@ public class TestController {
     }
 
 
-    public static void main(String[] args) throws Exception {
+    public static void climbData(String[] args) throws Exception {
         CloseableHttpClient httpclient = HttpClients.createDefault(); // 创建httpclient实例
         HttpGet httpget = new HttpGet("http://www.cnblogs.com/"); // 创建httpget实例
 

@@ -127,14 +127,14 @@ public class HaronApplication {
 		return WxMessage.Text.builder().content("网页都不对劲了，他是最帅的！").build();
 	}
 
-	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.THIRD, name = "上传图片到纪念册", type = WxButton.Type.PIC_PHOTO_OR_ALBUM)
+	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.FORTH, name = "上传图片到纪念册", type = WxButton.Type.PIC_PHOTO_OR_ALBUM)
 	public String right4(WxRequest wxRequest) {
 		WxRequestBody.Image  image = new WxRequestBody.Image();
 		image = image.of(wxRequest.getBody());
 		return image.getPicUrl();
 	}
 
-	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.THIRD, name = "右5", type = WxButton.Type.VIEW, url = "http://www.btkitty.com/")
+	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.FIFTH, name = "右5", type = WxButton.Type.VIEW, url = "http://www.btkitty.com/")
 	public WxMessage right5(WxUser wxUser) {
 		return WxMessage.newsBuilder().addItem("title","description","https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-674407.jpg","http://www.btkitty.com/").build();
 	}
