@@ -5,6 +5,8 @@
 //import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 //
 ///**
+// *
+// * 和yml中的实现结果一样，故排除
 // * Created by martea on 2018/8/27.
 // */
 //@Configuration

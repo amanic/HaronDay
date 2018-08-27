@@ -117,9 +117,14 @@ public class HaronApplication {
 		return dateRemindService.next(wxUser);
 	}
 
-	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.THIRD, name = "(●ﾟωﾟ●)", type = WxButton.Type.CLICK)
-	public String right3(WxUser wxUser) {
-		return "http://haron.natapp1.cc/temp/error.html";
+	@WxButton(type = WxButton.Type.VIEW,
+			group = WxButton.Group.RIGHT,
+			order = WxButton.Order.THIRD,
+			url = "http://haron.natapp1.cc/temp/error.html",
+			name = "反对陈海涛帅！")
+	@WxAsyncMessage
+	public WxMessage right3(WxRequest wxRequest) {
+		return WxMessage.Text.builder().content("点击了菜单链接").build();
 	}
 
 	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.THIRD, name = "右4", type = WxButton.Type.PIC_WEIXIN)
