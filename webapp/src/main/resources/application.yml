@@ -98,4 +98,4 @@ spring:
   mvc:
     static-path-pattern: /temp/**
   resources:
-    static-locations: /usr/local/tomcat/haron
+    static-locations: /usr/local/tomcat/haron/
