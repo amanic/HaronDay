@@ -93,7 +93,7 @@ public class HaronApplication {
 	/**
 	 * 定义微信菜单
 	 */
-	@WxButton(group = WxButton.Group.RIGHT, main = true, name = "右")
+	@WxButton(group = WxButton.Group.RIGHT, main = true, name = "纪念日")
 	@WxAsyncMessage
 	public String right(WxUser wxUser) {
 		return wxUser.getNickName() + "haha";
