@@ -124,12 +124,14 @@ public class HaronApplication {
 			name = "反对作者帅！")
 	@WxAsyncMessage
 	public WxMessage right3(WxRequest wxRequest) {
-		return WxMessage.Text.builder().content("网页都不对劲了，他是最帅的😍！").build();
+		return WxMessage.Text.builder().content("网页都不对劲了，他是最帅的！").build();
 	}
 
-	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.THIRD, name = "右4", type = WxButton.Type.PIC_WEIXIN)
-	public WxMessage right4(WxUser wxUser) {
-		return WxMessage.newsBuilder().addItem("title","description","https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-674407.jpg","http://www.btkitty.com/").build();
+	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.THIRD, name = "上传图片到纪念册", type = WxButton.Type.PIC_PHOTO_OR_ALBUM)
+	public String right4(WxRequest wxRequest) {
+		WxRequestBody.Image  image = new WxRequestBody.Image();
+		image = image.of(wxRequest.getBody());
+		return image.getPicUrl();
 	}
 
 	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.THIRD, name = "右5", type = WxButton.Type.VIEW, url = "http://www.btkitty.com/")
