@@ -1,6 +1,5 @@
 package com.haron.pro.haron;
 
-import com.alibaba.fastjson.JSONObject;
 import com.haron.pro.common.annotation.*;
 import com.haron.pro.common.module.credential.WxJsTicketManager;
 import com.haron.pro.common.module.event.WxEvent;
@@ -12,20 +11,15 @@ import com.haron.pro.common.module.js.WxJsConfig;
 import com.haron.pro.common.module.media.WxMedia;
 import com.haron.pro.common.module.media.WxMediaManager;
 import com.haron.pro.common.module.message.*;
-import com.haron.pro.common.module.user.WxTagUser;
 import com.haron.pro.common.module.user.WxUser;
 import com.haron.pro.common.module.web.WxRequest;
 import com.haron.pro.common.module.web.WxRequestBody;
 import com.haron.pro.common.module.web.session.WxSession;
 import com.haron.pro.common.service.WxApiService;
 import com.haron.pro.common.service.WxExtendService;
-import com.haron.pro.common.util.HttpClientUtil;
-import com.haron.pro.common.util.WxMessageUtils;
 import com.haron.pro.common.util.WxWebUtils;
 import com.haron.pro.common.web.WxWebUser;
-import com.haron.pro.dao.entity.DateRemind;
 import com.haron.pro.service.api.DateRemindService;
-import com.haron.pro.service.model.UnionParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -34,9 +28,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,7 +64,8 @@ public class HaronApplication {
 	@Autowired
 	DateRemindService dateRemindService;
 
-
+	@Autowired
+	JedisPool jedisPool;
 
 	/**
 	 * 定义微信菜单
@@ -128,10 +124,10 @@ public class HaronApplication {
 	}
 
 	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.FORTH, name = "上传图片到纪念册", type = WxButton.Type.PIC_PHOTO_OR_ALBUM)
-	public String right4(WxRequest wxRequest) {
-		WxRequestBody.Image  image = new WxRequestBody.Image();
-		image = image.of(wxRequest.getBody());
-		return image.getPicUrl();
+	public void right4(WxRequest wxRequest,WxUser wxUser) {
+		Jedis jedis = jedisPool.getResource();
+		jedis.setex(wxUser.getOpenId(),60,"1");
+		jedis.close();
 	}
 
 	@WxButton(group = WxButton.Group.RIGHT, order = WxButton.Order.FIFTH, name = "右5", type = WxButton.Type.VIEW, url = "http://www.btkitty.com/")
@@ -406,5 +402,17 @@ public class HaronApplication {
 	@ResponseBody
 	public WxJsConfig wxJsConfig() {
 		return wxJsTicketManager.getWxJsConfigFromRequest(WxJsApi.getLocation);
+	}
+
+	@WxMessageMapping(type = WxMessage.Type.IMAGE)
+	public WxMessage getPicUrl(WxUser wxUser,WxRequest wxRequest){
+		//TODO 结构优化，service和dal，这里需将图片地址入库并且定时更新图片地址。
+		Jedis jedis = jedisPool.getResource();
+		if(null==jedis.get(wxUser.getOpenId())){
+			return WxMessage.textBuilder().content("图片不错ヽ(･ω･´ﾒ),若想要上传图片到纪念日相册，请点击菜单：纪念日-->上传图片到纪念册。").toGroup(wxUser.getOpenId()).build();
+		}
+		jedis.del(wxUser.getOpenId());
+		jedis.close();
+		return WxMessage.textBuilder().content("上传成功，图片链接为："+wxRequest.getBody().getPicUrl()).toGroup(wxUser.getOpenId()).build();
 	}
 }
