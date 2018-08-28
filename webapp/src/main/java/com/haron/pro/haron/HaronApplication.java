@@ -120,7 +120,7 @@ public class HaronApplication {
 	@WxButton(type = WxButton.Type.VIEW,
 			group = WxButton.Group.RIGHT,
 			order = WxButton.Order.THIRD,
-			url = "http://haron.natapp1.cc/temp/error.html",
+			url = "http://haron.natapp1.cc/temp/albumExample/error.html",
 			name = "反对作者帅")
 	@WxAsyncMessage
 	public WxMessage right3(WxRequest wxRequest) {
