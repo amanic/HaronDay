@@ -137,7 +137,7 @@ public class HaronApplication {
 	@WxButton(type = WxButton.Type.VIEW,
 			group = WxButton.Group.RIGHT,
 			order = WxButton.Order.FIFTH,
-			url = "http://haron.natapp1.cc/temp/albumExample/view/index.html",
+			url = "http://haron.natapp1.cc/wx/test/t6",
 			name = "纪念相册")
 	@WxAsyncMessage
 	public WxMessage right5(WxRequest wxRequest) {

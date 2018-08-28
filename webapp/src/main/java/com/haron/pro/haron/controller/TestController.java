@@ -3,6 +3,7 @@ package com.haron.pro.haron.controller;
 import com.haron.pro.common.annotation.LogOperationTag;
 import com.haron.pro.common.annotation.WxMapping;
 import com.haron.pro.common.module.user.WxUser;
+import com.haron.pro.common.util.FileUtil;
 import com.haron.pro.haron.schedule.RemindDateSchedule;
 import com.haron.pro.service.api.TestService;
 import org.apache.http.HttpEntity;
@@ -16,16 +17,16 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 
 /**
  * Created by chenhaitao on 2018/7/26.
  */
-@RestController
+@Controller
 @RequestMapping("wx/test")
 public class TestController {
 
@@ -71,9 +72,11 @@ public class TestController {
      * @return openID
      */
     @GetMapping("t6")
-    @WxMapping
     public String t6(WxUser wxUser){
-        return wxUser.getOpenId();
+        if(FileUtil.isFileExist("/usr/local/tomcat/haron/albumExample/view/"+wxUser.getOpenId()+"_album.html")){
+            return "redirect:http://haron.natapp1.cc/temp/albumExample/view/"+wxUser.getOpenId()+"_album.html";
+        }
+        return "您还没有相册哦，快去上传图片吧~";
     }
 
 

@@ -48,7 +48,7 @@ public class FileUtil {
      * @param fileContent 文件内容
      * @throws Exception
      */
-    public static void WriteStringToFile5(String filePath,String fileContent) throws Exception{
+    public static void WriteStringToFile(String filePath,String fileContent) throws Exception{
             FileOutputStream fos = new FileOutputStream(filePath);
             fos.write(fileContent.getBytes());
             fos.close();
@@ -418,7 +418,7 @@ public class FileUtil {
     public static void main(String[] args) {
         try {
             System.out.println(fileRead("/Users/martea/Desktop/index.html"));
-            WriteStringToFile5("/Users/martea/Desktop/index1.html","xrtuygiwuhovia12fga");
+            WriteStringToFile("/Users/martea/Desktop/index1.html","xrtuygiwuhovia12fga");
         } catch (Exception e) {
             e.printStackTrace();
         }
