@@ -15,8 +15,8 @@ public class FileUtil {
                             "\t\t                        <img src=\"￥\" alt=\"Park\">\n" +
                             "\t\t                    </a>\n" +
                             "\t\t                    <div class=\"caption\">\n" +
-                            "\t\t                        <h3>${lable}</h3>\n" +
-                            "\t\t                        <p>${explain}</p>\n" +
+                            "\t\t                        <h3>lable</h3>\n" +
+                            "\t\t                        <p>explain</p>\n" +
                             "\t\t                    </div>\n" +
                             "\t\t                </div>\n" +
                             "\t\t            </div>";
