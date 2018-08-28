@@ -3,7 +3,9 @@ package com.haron.pro.haron.controller;
 import com.haron.pro.common.annotation.LogOperationTag;
 import com.haron.pro.common.annotation.WxMapping;
 import com.haron.pro.common.module.user.WxUser;
+import com.haron.pro.common.service.WxApiService;
 import com.haron.pro.common.util.FileUtil;
+import com.haron.pro.common.util.WxWebUtils;
 import com.haron.pro.haron.schedule.RemindDateSchedule;
 import com.haron.pro.service.api.TestService;
 import org.apache.http.HttpEntity;
@@ -35,6 +37,9 @@ public class TestController {
 
     @Autowired
     RemindDateSchedule remindDateSchedule;
+
+    @Autowired
+    WxApiService wxApiService;
 
 
 
@@ -72,7 +77,8 @@ public class TestController {
      * @return openID
      */
     @GetMapping("t6")
-    public String t6(WxUser wxUser){
+    public String t6(){
+        WxUser wxUser = wxApiService.getUserInfo(WxWebUtils.getWxWebUserFromSession().getOpenId());
         if(FileUtil.isFileExist("/usr/local/tomcat/haron/albumExample/view/"+wxUser.getOpenId()+"_album.html")){
             return "redirect:http://haron.natapp1.cc/temp/albumExample/view/"+wxUser.getOpenId()+"_album.html";
         }
