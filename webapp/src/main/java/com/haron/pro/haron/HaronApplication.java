@@ -413,6 +413,12 @@ public class HaronApplication {
 		return wxJsTicketManager.getWxJsConfigFromRequest(WxJsApi.getLocation);
 	}
 
+	/**
+	 * 接收消息格式为图片并相应判断，尝试上传图片
+	 * @param wxUser
+	 * @param wxRequest
+	 * @return
+	 */
 	@WxMessageMapping(type = WxMessage.Type.IMAGE)
 	public WxMessage getPicUrl(WxUser wxUser,WxRequest wxRequest){
 		return albumService.insertPhoto(wxUser,wxRequest);
