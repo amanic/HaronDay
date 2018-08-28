@@ -11,8 +11,8 @@ public class FileUtil {
 
     public static final String albumString = "<div class=\"col-sm-6 col-md-4\">\n" +
                             "\t\t                <div class=\"thumbnail\">\n" +
-                            "\t\t                    <a class=\"lightbox\" href=\"${picUrl}\">\n" +
-                            "\t\t                        <img src=\"${picUrl}\" alt=\"Park\">\n" +
+                            "\t\t                    <a class=\"lightbox\" href=\"￥\">\n" +
+                            "\t\t                        <img src=\"￥\" alt=\"Park\">\n" +
                             "\t\t                    </a>\n" +
                             "\t\t                    <div class=\"caption\">\n" +
                             "\t\t                        <h3>${lable}</h3>\n" +

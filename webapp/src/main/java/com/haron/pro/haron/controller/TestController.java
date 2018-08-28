@@ -73,7 +73,6 @@ public class TestController {
 
     /**
      * 测试{@link org.springframework.web.method.support.HandlerMethodArgumentResolver}的supportsParameter
-     * @param wxUser
      * @return openID
      */
     @GetMapping("t6")
@@ -82,7 +81,7 @@ public class TestController {
         if(FileUtil.isFileExist("/usr/local/tomcat/haron/albumExample/view/"+wxUser.getOpenId()+"_album.html")){
             return "redirect:http://haron.natapp1.cc/temp/albumExample/view/"+wxUser.getOpenId()+"_album.html";
         }
-        return "您还没有相册哦，快去上传图片吧~";
+        return "redirect:http://haron.natapp1.cc/temp/albumExample/error.html";
     }
 
 

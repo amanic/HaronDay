@@ -44,7 +44,8 @@ public class AlbumServiceImpl implements AlbumService{
             }else {
                 String fileContent = FileUtil.fileRead("/usr/local/tomcat/haron/albumExample/view/index.html");
                 fileContent.replaceAll("￥",wxUser.getNickName());
-                fileContent.replaceAll("@",wxRequest.getBody().getPicUrl());
+                String albumString = FileUtil.albumString.replaceAll("￥",wxRequest.getBody().getPicUrl());
+                fileContent.replaceAll("%",albumString);
                 FileUtil.WriteStringToFile(fileName,fileContent);
             }
             return WxMessage.textBuilder().content("上传成功，图片链接为："+wxRequest.getBody().getPicUrl()+",后续将推出纪念日相册功能，敬请期待！").toGroup(wxUser.getOpenId()).build();
