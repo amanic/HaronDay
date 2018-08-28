@@ -57,7 +57,10 @@ public class AlbumServiceImpl implements AlbumService{
             String fileName = "/usr/local/tomcat/haron/albumExample/view/"+wxUser.getOpenId()+"_album.html";
             // 判断文件是否存在
             if(FileUtil.isFileExist(fileName)){
-
+                String fileContent = FileUtil.fileRead("/usr/local/tomcat/haron/albumExample/view/index.html");
+                String albumString = FileUtil.albumString.replaceAll("url",fileUrl);
+                fileContent = fileContent.replaceAll("albumReplacement",albumString);
+                FileUtil.WriteStringToFile(fileName,fileContent);
             }else {
                 String fileContent = FileUtil.fileRead("/usr/local/tomcat/haron/albumExample/view/index.html");
                 fileContent = fileContent.replaceAll("￥",wxUser.getNickName());

@@ -33,7 +33,7 @@ public class FileUtil {
                             "\t\t                        <p>explain</p>\n" +
                             "\t\t                    </div>\n" +
                             "\t\t                </div>\n" +
-                            "\t\t            </div>";
+                            "\t\t            </div>albumReplacement";
 
     /**
      * 读取文件内容
