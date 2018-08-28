@@ -11,8 +11,8 @@ public class FileUtil {
 
     public static final String albumString = "<div class=\"col-sm-6 col-md-4\">\n" +
                             "\t\t                <div class=\"thumbnail\">\n" +
-                            "\t\t                    <a class=\"lightbox\" href=\"￥\">\n" +
-                            "\t\t                        <img src=\"￥\" alt=\"Park\">\n" +
+                            "\t\t                    <a class=\"lightbox\" href=\"url\">\n" +
+                            "\t\t                        <img src=\"url\" alt=\"Park\">\n" +
                             "\t\t                    </a>\n" +
                             "\t\t                    <div class=\"caption\">\n" +
                             "\t\t                        <h3>lable</h3>\n" +
@@ -417,8 +417,23 @@ public class FileUtil {
 
     public static void main(String[] args) {
         try {
-            System.out.println(fileRead("/Users/martea/Desktop/index.html"));
-            WriteStringToFile("/Users/martea/Desktop/index1.html","xrtuygiwuhovia12fga");
+//            System.out.println(fileRead("/Users/martea/Desktop/index.html"));
+
+//            System.out.println(isFileExist("/Users/martea/Desktop/index.html"));
+//            WriteStringToFile("/Users/martea/Desktop/index1.html","xrtuygiwuhovia12fga");
+//            String fileContent = FileUtil.fileRead("/Users/martea/Desktop/index.html");
+//            System.out.println(fileContent);
+//            System.out.println("*****************************************************************");
+//            fileContent = fileContent.replaceAll("￥","略略略");
+//            System.out.println(fileContent);
+//            System.out.println("*****************************************************************");
+//            String albumString = FileUtil.albumString.replaceAll("url","http://mmbiz.qpic.cn/mmbiz_jpg/rfnD6pFXHM908LUPwlicVrrPVUqC081liczqJichpLA9pelFL1gvvUdcibGRNcusd6N3ic7Srru9bfEJQvHTCKNj8hQ/0");
+//            System.out.println(albumString);
+//            System.out.println("*****************************************************************");
+//            fileContent = fileContent.replaceAll("albumReplacement",albumString);
+//            System.out.println(fileContent);
+//            System.out.println("*****************************************************************");
+//            FileUtil.WriteStringToFile("/Users/martea/Desktop/index1.html",fileContent);
         } catch (Exception e) {
             e.printStackTrace();
         }
