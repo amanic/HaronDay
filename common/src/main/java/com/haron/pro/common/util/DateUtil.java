@@ -27,6 +27,32 @@ public class DateUtil {
         }
     }
 
+    /**
+     * 获得指定时间加减参数后的日期(不计算则输入0)
+     * @param date 指定日期
+     * @param year 年数，可正可负
+     * @param month 月数，可正可负
+     * @param day 天数，可正可负
+     * @param hour 小时数，可正可负
+     * @param minute 分钟数，可正可负
+     * @param second 秒数，可正可负
+     * @param millisecond 毫秒数，可正可负
+     * @return 计算后的日期
+     */
+    public static Date addDate(Date date,int year,int month,int day,int hour,int minute,int second,int millisecond){
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.YEAR, year);//加减年数
+        c.add(Calendar.MONTH, month);//加减月数
+        c.add(Calendar.DATE, day);//加减天数
+        c.add(Calendar.HOUR,hour);//加减小时数
+        c.add(Calendar.MINUTE, minute);//加减分钟数
+        c.add(Calendar.SECOND, second);//加减秒
+        c.add(Calendar.MILLISECOND, millisecond);//加减毫秒数
+
+        return c.getTime();
+    }
+
 
     /**
      * 把日期类型格式化成字符串

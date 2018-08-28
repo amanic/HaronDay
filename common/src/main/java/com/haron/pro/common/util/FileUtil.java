@@ -1,8 +1,22 @@
 package com.haron.pro.common.util;
 
+import com.alibaba.fastjson.JSON;
+import com.aliyun.oss.HttpMethod;
+import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.model.PutObjectResult;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 
 /**
  * Created by martea on 2018/8/28.
@@ -415,25 +429,93 @@ public class FileUtil {
         }
     }
 
+    /**
+     * 根据URL将文件下载到本地
+     * @param urlsrc
+     * @param outpath
+     * @return
+     * @throws Exception
+     */
+    public static String DownLoadPages(String urlsrc, String outpath) throws Exception
+    {
+        // 输入流
+        InputStream in = null;
+        // 文件输出流
+        FileOutputStream out = null;
+
+            HttpParams httpParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpParams,5000); //设置连接超时为5秒
+            HttpClient client = new DefaultHttpClient(httpParams); // 生成一个http客户端发送请求对象
+            HttpGet httpget1 = new HttpGet(urlsrc); //对查询页面get
+            HttpResponse httpResponse1 = client.execute(httpget1); // 发送请求并等待响应
+            // 判断网络连接是否成功
+            System.out.println("状态码："+httpResponse1.getStatusLine().getStatusCode());
+            if (httpResponse1.getStatusLine().getStatusCode() != 200)
+                System.out.println("网络错误异常！!!!");
+            else
+                System.out.println("网络连接成功!!!");
+            httpget1.abort(); //关闭get
+            HttpGet httpget2 = new HttpGet(urlsrc); //对下载链接get实现下载
+            HttpResponse httpResponse2 = client.execute(httpget2);
+            HttpEntity entity = httpResponse2.getEntity(); // 获取响应里面的内容
+            in = entity.getContent(); // 得到服务气端发回的响应的内容（都在一个流里面）
+            out = new FileOutputStream(new File(outpath));
+            byte[] b = new byte[1024];
+            int len = 0;
+            while((len=in.read(b))!= -1){
+                out.write(b,0,len);
+            }
+            in.close();
+            out.close();
+            return outpath;
+    }
+
+
+    /**
+     * 将文件上传到阿里云OSS
+     * @param AccessKey
+     * @param AccessKeySecret
+     * @param fileName
+     * @param key
+     * @return
+     */
+    public static String uploadToOss(String AccessKey, String AccessKeySecret, String fileName, String key) {
+        // Endpoint以杭州为例，其它Region请按实际情况填写。
+        String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
+// 阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录 https://ram.console.aliyun.com 创建RAM账号。
+        String accessKeyId = AccessKey;
+        String accessKeySecret = AccessKeySecret;
+// 创建OSSClient实例。
+        OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+// 上传文件。
+        PutObjectResult putObjectResult = ossClient.putObject("zymcht", key, new File(fileName));
+        ossClient.shutdown();
+        return JSON.toJSONString(putObjectResult);
+    }
+
+
+    public static String getOssUrl(String AccessKey, String AccessKeySecret, String key) {
+        // Endpoint以杭州为例，其它Region请按实际情况填写。
+        String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
+// 阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录 https://ram.console.aliyun.com 创建RAM账号。
+        String accessKeyId = AccessKey;
+        String accessKeySecret = AccessKeySecret;
+// 创建OSSClient实例。
+        OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+        URL url = ossClient.generatePresignedUrl("zymcht",key, DateUtil.addDate(new Date(),0,1,0,0,0,0,0), HttpMethod.GET);
+        System.out.println("******"+JSON.toJSONString(url)+"******");
+// 上传文件。
+
+        ossClient.shutdown();
+
+// 关闭OSSClient。
+        return url.toString();
+    }
+
+
     public static void main(String[] args) {
         try {
-//            System.out.println(fileRead("/Users/martea/Desktop/index.html"));
-
-//            System.out.println(isFileExist("/Users/martea/Desktop/index.html"));
-//            WriteStringToFile("/Users/martea/Desktop/index1.html","xrtuygiwuhovia12fga");
-//            String fileContent = FileUtil.fileRead("/Users/martea/Desktop/index.html");
-//            System.out.println(fileContent);
-//            System.out.println("*****************************************************************");
-//            fileContent = fileContent.replaceAll("￥","略略略");
-//            System.out.println(fileContent);
-//            System.out.println("*****************************************************************");
-//            String albumString = FileUtil.albumString.replaceAll("url","http://mmbiz.qpic.cn/mmbiz_jpg/rfnD6pFXHM908LUPwlicVrrPVUqC081liczqJichpLA9pelFL1gvvUdcibGRNcusd6N3ic7Srru9bfEJQvHTCKNj8hQ/0");
-//            System.out.println(albumString);
-//            System.out.println("*****************************************************************");
-//            fileContent = fileContent.replaceAll("albumReplacement",albumString);
-//            System.out.println(fileContent);
-//            System.out.println("*****************************************************************");
-//            FileUtil.WriteStringToFile("/Users/martea/Desktop/index1.html",fileContent);
+            DownLoadPages("http://mmbiz.qpic.cn/mmbiz_jpg/rfnD6pFXHM9jiacpS1hpqRoB8C9ZFmQ6TdOH2nOM3hmW3fIdt6iauHiboJgn3xibgwiatT9iaO9p5h7YtvgolDicuBPTA/0","/Users/martea/Desktop/a.jpg");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -99,3 +99,8 @@ spring:
     static-path-pattern: /temp/**
   resources:
     static-locations: file:/usr/local/tomcat/haron/
+
+
+ali:
+  key: LTAINod0uCHTVovhmXK
+  secret: gddwGZZYM2ke7dXB6Dq3MouphQk30Ortg
