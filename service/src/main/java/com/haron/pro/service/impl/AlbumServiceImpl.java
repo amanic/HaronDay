@@ -44,7 +44,7 @@ public class AlbumServiceImpl implements AlbumService{
             }else {
                 String fileContent = FileUtil.fileRead("/usr/local/tomcat/haron/albumExample/view/index.html");
                 fileContent = fileContent.replaceAll("￥",wxUser.getNickName());
-                String albumString = FileUtil.albumString.replaceAll("￥",wxRequest.getBody().getPicUrl());
+                String albumString = FileUtil.albumString.replaceAll("url",wxRequest.getBody().getPicUrl());
                 fileContent = fileContent.replaceAll("albumReplacement",albumString);
                 FileUtil.WriteStringToFile(fileName,fileContent);
             }
