@@ -1,5 +1,6 @@
 package com.haron.pro.service.impl;
 
+import com.haron.pro.common.annotation.LogOperationTag;
 import com.haron.pro.common.module.message.WxMessage;
 import com.haron.pro.common.module.message.WxMessageTemplate;
 import com.haron.pro.common.module.message.WxTemplateMessage;
@@ -8,6 +9,7 @@ import com.haron.pro.common.module.user.WxUser;
 import com.haron.pro.common.service.WxApiService;
 import com.haron.pro.common.util.WxWebUtils;
 import com.haron.pro.common.web.WxWebUser;
+import com.haron.pro.dao.entity.User;
 import com.haron.pro.dao.mapper.UserMapper;
 import com.haron.pro.service.api.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import redis.clients.jedis.JedisPool;
 /**
  * Created by chenhaitao on 2018/7/28.
@@ -89,4 +93,18 @@ public class TestServiceImpl implements TestService{
         wxApiService.sendTemplateMessage(wxTemplateMessage);
         return "成功";
     }
+
+    @LogOperationTag
+    @Override
+    @Transactional
+    public String test6(Integer id) {
+        User user = new User();
+        user.setId(1);
+        user.setName("chen");
+        userMapper.updateByPrimaryKeySelective(user);
+        int i = 1/id;
+        return i+"";
+    }
+
+
 }

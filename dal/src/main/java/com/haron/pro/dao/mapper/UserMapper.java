@@ -1,5 +1,6 @@
 package com.haron.pro.dao.mapper;
 
+import com.haron.pro.common.annotation.JudgeColumn;
 import com.haron.pro.dao.entity.User;
 import com.haron.pro.dao.entity.UserExample;
 import java.util.List;
@@ -84,6 +85,7 @@ public interface UserMapper {
      *
      * @mbggenerated Sat Jul 28 00:13:45 CST 2018
      */
+    @JudgeColumn
     int updateByPrimaryKeySelective(User record);
 
     /**
